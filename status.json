@@ -2,15 +2,15 @@
   "293c88df-f8ae-48c6-9f94-3e04f8d1c6fb": {
     "bins": {
       "aluminum": {
-        "level": 40,
+        "level": 7,
         "state": true
       },
       "glass": {
-        "level": 65,
+        "level": 64,
         "state": true
       },
       "pet": {
-        "level": 75,
+        "level": 64,
         "state": true
       }
     },
@@ -40,7 +40,7 @@
   "639ed9ca-b5b3-419c-bec5-6f5296211cbe": {
     "bins": {
       "aluminum": {
-        "level": 94,
+        "level": 92,
         "state": false
       },
       "glass": {
@@ -48,7 +48,7 @@
         "state": false
       },
       "pet": {
-        "level": 90,
+        "level": 91,
         "state": false
       }
     },
@@ -59,11 +59,11 @@
   "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
     "bins": {
       "aluminum": {
-        "level": 63,
+        "level": 84,
         "state": true
       },
       "glass": {
-        "level": 46,
+        "level": 61,
         "state": true
       },
       "pet": {
@@ -97,7 +97,7 @@
   "ff68d07b-7e2d-4c2a-a61d-ba63a61c410f": {
     "bins": {
       "aluminum": {
-        "level": 66,
+        "level": 67,
         "state": true
       },
       "glass": {
@@ -105,7 +105,7 @@
         "state": false
       },
       "pet": {
-        "level": 76,
+        "level": 81,
         "state": true
       }
     },
