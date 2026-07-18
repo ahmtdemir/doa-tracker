@@ -35,16 +35,16 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python main.py
 
-      - name: Durum dosyasını kaydet
+      - name: Durum ve geçmiş dosyalarını kaydet
         run: |
-          if git diff --quiet status.json; then
-            echo "status.json değişmedi."
+          if [ -z "$(git status --porcelain -- status.json machine_history.jsonl)" ]; then
+            echo "Kaydedilecek durum veya geçmiş değişikliği yok."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add status.json
-          git commit -m "Update DOA machine status"
+          git add status.json machine_history.jsonl
+          git commit -m "Update DOA machine status and history"
           git push
