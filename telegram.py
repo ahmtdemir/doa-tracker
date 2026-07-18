@@ -1,25 +1,63 @@
-import requests
-from config import BOT_TOKEN, CHAT_ID
+BOT_TOKEN = "8686464914:AAFLYm-zhY5wggUbbouXLKqDIMEtRFr6gFI"
+CHAT_ID = "868647307"
 
+API_URL = (
+    "https://dbysmgw.doa.gov.tr/"
+    "dbys/v3/web/rvm/search?pageNumber=1&pageSize=100"
+)
 
-def telegram_gonder(mesaj):
+SEARCH_POINTS = [
+    {
+        "name": "MENTESE",
+        "label": "Muğla Merkez",
+        "lat": 37.21596145629883,
+        "lon": 28.36799430847168,
+        "distance": 15000,
+        "userLat": 37.21596145629883,
+        "userLon": 28.36799430847168,
+    },
+    {
+        "name": "ULA",
+        "label": "Ula",
+        "lat": 37.1030,
+        "lon": 28.4160,
+        "distance": 15000,
+        "userLat": 37.1030,
+        "userLon": 28.4160,
+    },
+    {
+        "name": "YATAGAN",
+        "label": "Yatağan",
+        "lat": 37.3400,
+        "lon": 28.1400,
+        "distance": 15000,
+        "userLat": 37.3400,
+        "userLon": 28.1400,
+    },
+]
 
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+MAKINE_KURALLARI = {
+    "Q681 BİM NERGİS": {
+        "label": "Muğla Merkez",
+        "type": "target",
+    },
+    "MİGROS MUĞLA": {
+        "label": "Muğla Merkez",
+        "type": "target",
+    },
+    "BİM-AYDINLIKEVLER": {
+        "label": "Milas",
+        "type": "early_warning",
+    },
+}
 
-    try:
-        r = requests.post(
-            url,
-            json={
-                "chat_id": CHAT_ID,
-                "text": mesaj
-            },
-            timeout=15
-        )
+OTOMATIK_ERKEN_UYARI_BOLGELERI = {
+    "ULA",
+    "YATAGAN",
+}
 
-        if r.status_code == 200:
-            print("Telegram mesajı gönderildi.")
-        else:
-            print("Telegram Hatası:", r.text)
-
-    except Exception as e:
-        print("Telegram Bağlantı Hatası:", e)
+TAKIP_KUTULARI = {
+    "pet",
+    "glass",
+    "aluminum",
+}
