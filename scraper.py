@@ -7,32 +7,29 @@ def siteyi_test_et():
 
     tum_makineler = {}
 
-for nokta in SEARCH_POINTS:
+    # Tüm arama noktalarını tara
+    for nokta in SEARCH_POINTS:
 
-    response = requests.post(
-        API_URL,
-        json=nokta,
-        timeout=20
-    )
+        response = requests.post(
+            API_URL,
+            json=nokta,
+            timeout=20
+        )
 
-    if response.status_code != 200:
-        continue
+        if response.status_code != 200:
+            print(f"API Hatası ({nokta['name']}):", response.status_code)
+            continue
 
-    data = response.json()
+        data = response.json()
 
-    for makina in data["rvmList"]:
+        for makina in data.get("rvmList", []):
+            tum_makineler[makina["id"]] = makina
 
-        tum_makineler[makina["id"]] = makina
-
-    if response.status_code != 200:
-        print("API Hatası:", response.status_code)
-        return
-
-    data = response.json()
+    print(f"Toplam bulunan makine: {len(tum_makineler)}")
 
     bulundu = False
 
-   for makina in tum_makineler.values():
+    for makina in tum_makineler.values():
 
         isim = makina["definition"]["name"]
 
@@ -49,7 +46,7 @@ for nokta in SEARCH_POINTS:
 
             mesaj += (
                 f"{kutu['contentType'].upper()} : "
-                f"{kutu['level']}%  {durum}\n"
+                f"{kutu['level']}% {durum}\n"
             )
 
         telegram_gonder(mesaj)
