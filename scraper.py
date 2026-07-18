@@ -78,10 +78,10 @@ def makina_siniflandir(makina_ismi, bulundugu_bolgeler):
 def makina_durumu_olustur(makina, siniflandirma):
     """
     API'den gelen makine ve hazne durumlarını status.json
-    içine kaydedilecek standart yapıya dönüştürür.
+    ve geçmiş kayıt sistemi için standart yapıya dönüştürür.
 
-    machineStatus, active ve status alanlarının anlamına
-    henüz karar vermiyoruz; yalnızca veri topluyoruz.
+    machineStatus, active ve status alanlarının anlamını
+    henüz yorumlamıyoruz; yalnızca veri topluyoruz.
     """
 
     isim = makina.get("definition", {}).get(
@@ -94,22 +94,18 @@ def makina_durumu_olustur(makina, siniflandirma):
         "label": siniflandirma["label"],
         "type": siniflandirma["type"],
 
-        # Makine kimlik ve konum bilgileri
         "address": makina.get("address"),
         "latitude": makina.get("latitude"),
         "longitude": makina.get("longitude"),
 
-        # Makine seviyesindeki durum alanları
         "machineStatus": makina.get("machineStatus"),
         "active": makina.get("active"),
         "status": makina.get("status"),
 
-        # API'nin gösterdiği çalışma saati bilgisi
         "openingClosingHours": makina.get(
             "openingClosingHours"
         ),
 
-        # Kaydın en son ne zaman güncellendiği
         "lastChecked": datetime.now(
             TURKIYE_SAATI
         ).isoformat(),
