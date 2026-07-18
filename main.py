@@ -1,5 +1,5 @@
-from telegram import telegram_gonder
+from scraper import siteyi_test_et
 
 print("DOA Tracker başladı")
 
-telegram_gonder("✅ GitHub üzerinden yeni DOA botu başarıyla çalıştı.")
+siteyi_test_et()
