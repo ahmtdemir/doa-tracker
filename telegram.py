@@ -1,63 +1,43 @@
-BOT_TOKEN = "8686464914:AAFLYm-zhY5wggUbbouXLKqDIMEtRFr6gFI"
-CHAT_ID = "868647307"
+import os
 
-API_URL = (
-    "https://dbysmgw.doa.gov.tr/"
-    "dbys/v3/web/rvm/search?pageNumber=1&pageSize=100"
-)
+import requests
 
-SEARCH_POINTS = [
-    {
-        "name": "MENTESE",
-        "label": "Muğla Merkez",
-        "lat": 37.21596145629883,
-        "lon": 28.36799430847168,
-        "distance": 15000,
-        "userLat": 37.21596145629883,
-        "userLon": 28.36799430847168,
-    },
-    {
-        "name": "ULA",
-        "label": "Ula",
-        "lat": 37.1030,
-        "lon": 28.4160,
-        "distance": 15000,
-        "userLat": 37.1030,
-        "userLon": 28.4160,
-    },
-    {
-        "name": "YATAGAN",
-        "label": "Yatağan",
-        "lat": 37.3400,
-        "lon": 28.1400,
-        "distance": 15000,
-        "userLat": 37.3400,
-        "userLon": 28.1400,
-    },
-]
 
-MAKINE_KURALLARI = {
-    "Q681 BİM NERGİS": {
-        "label": "Muğla Merkez",
-        "type": "target",
-    },
-    "MİGROS MUĞLA": {
-        "label": "Muğla Merkez",
-        "type": "target",
-    },
-    "BİM-AYDINLIKEVLER": {
-        "label": "Milas",
-        "type": "early_warning",
-    },
-}
+BOT_TOKEN = os.getenv("TELEGRAM_TOKEN")
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-OTOMATIK_ERKEN_UYARI_BOLGELERI = {
-    "ULA",
-    "YATAGAN",
-}
 
-TAKIP_KUTULARI = {
-    "pet",
-    "glass",
-    "aluminum",
-}
+def telegram_gonder(mesaj):
+    if not BOT_TOKEN:
+        print("Telegram Hatası: TELEGRAM_TOKEN bulunamadı.")
+        return False
+
+    if not CHAT_ID:
+        print("Telegram Hatası: TELEGRAM_CHAT_ID bulunamadı.")
+        return False
+
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+
+    try:
+        response = requests.post(
+            url,
+            json={
+                "chat_id": CHAT_ID,
+                "text": mesaj,
+            },
+            timeout=15,
+        )
+
+        if response.status_code == 200:
+            print("Telegram mesajı gönderildi.")
+            return True
+
+        print(
+            f"Telegram Hatası ({response.status_code}):",
+            response.text,
+        )
+        return False
+
+    except requests.RequestException as hata:
+        print("Telegram Bağlantı Hatası:", hata)
+        return False
