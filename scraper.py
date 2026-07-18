@@ -1,5 +1,8 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from status_manager import durumlari_yukle, durumlari_kaydet
+from history_manager import gecmis_kaydi_ekle
+from telegram import telegram_gonder
 
 import requests
 
