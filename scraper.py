@@ -1,55 +1,169 @@
 import requests
+
 from config import API_URL, SEARCH_POINTS, TAKIP_MAKINELERI
+from status_manager import durumlari_yukle, durumlari_kaydet
 from telegram import telegram_gonder
 
 
-def siteyi_test_et():
+def makine_durumu_olustur(makina):
+    durum = {
+        "name": makina.get("definition", {}).get("name", "Bilinmeyen Makine"),
+        "bins": {}
+    }
 
-    tum_makineler = {}
+    for kutu in makina.get("binList", []):
+        tur = str(kutu.get("contentType", "unknown")).lower()
 
-    # Tüm arama noktalarını tara
-    for nokta in SEARCH_POINTS:
+        durum["bins"][tur] = {
+            "level": kutu.get("level", 0),
+            "state": bool(kutu.get("state", False))
+        }
 
-        response = requests.post(
-            API_URL,
-            json=nokta,
-            timeout=20
-        )
+    return durum
 
-        if response.status_code != 200:
-            print(f"API Hatası ({nokta['name']}):", response.status_code)
+
+def degisiklik_mesaji_olustur(isim, eski_durum, yeni_durum):
+    satirlar = [
+        "🔔 DOA Durum Güncellemesi",
+        "",
+        f"📍 {isim}",
+        ""
+    ]
+
+    eski_kutular = eski_durum.get("bins", {})
+    yeni_kutular = yeni_durum.get("bins", {})
+
+    degisiklik_var = False
+
+    for tur, yeni_kutu in yeni_kutular.items():
+        eski_kutu = eski_kutular.get(tur)
+
+        if eski_kutu is None:
             continue
 
-        data = response.json()
+        eski_state = eski_kutu.get("state")
+        yeni_state = yeni_kutu.get("state")
+
+        eski_level = eski_kutu.get("level", 0)
+        yeni_level = yeni_kutu.get("level", 0)
+
+        if eski_state != yeni_state:
+            degisiklik_var = True
+
+            durum_metni = (
+                "✅ ARTIK UYGUN"
+                if yeni_state
+                else "❌ ARTIK DOLU"
+            )
+
+            satirlar.append(
+                f"{tur.upper()} : {durum_metni}\n"
+                f"%{eski_level} → %{yeni_level}"
+            )
+            satirlar.append("")
+
+    if not degisiklik_var:
+        return None
+
+    return "\n".join(satirlar).strip()
+
+
+def ilk_durum_mesaji_olustur(yeni_durum):
+    satirlar = [
+        "♻️ DOA Takip Başlatıldı",
+        "",
+        f"📍 {yeni_durum['name']}",
+        ""
+    ]
+
+    for tur, kutu in yeni_durum["bins"].items():
+        durum_metni = "✅ UYGUN" if kutu["state"] else "❌ DOLU"
+
+        satirlar.append(
+            f"{tur.upper()} : %{kutu['level']} {durum_metni}"
+        )
+
+    return "\n".join(satirlar)
+
+
+def siteyi_test_et():
+    tum_makineler = {}
+
+    for nokta in SEARCH_POINTS:
+        try:
+            response = requests.post(
+                API_URL,
+                json=nokta,
+                timeout=20
+            )
+            response.raise_for_status()
+
+            data = response.json()
+
+        except requests.RequestException as hata:
+            print(
+                f"API Hatası "
+                f"({nokta.get('name', 'Bilinmeyen nokta')}): {hata}"
+            )
+            continue
+
+        except ValueError:
+            print("API geçerli JSON döndürmedi.")
+            continue
 
         for makina in data.get("rvmList", []):
-            tum_makineler[makina["id"]] = makina
+            makina_id = str(makina.get("id", ""))
+
+            if makina_id:
+                tum_makineler[makina_id] = makina
 
     print(f"Toplam bulunan makine: {len(tum_makineler)}")
 
-    bulundu = False
+    eski_durumlar = durumlari_yukle()
+    yeni_durumlar = {}
 
-    for makina in tum_makineler.values():
+    takip_edilen_bulundu = False
 
-        isim = makina["definition"]["name"]
+    for makina_id, makina in tum_makineler.items():
+        isim = makina.get("definition", {}).get("name", "")
 
-        if not any(takip in isim for takip in TAKIP_MAKINELERI):
+        if not any(
+            takip.lower() in isim.lower()
+            for takip in TAKIP_MAKINELERI
+        ):
             continue
 
-        bulundu = True
+        takip_edilen_bulundu = True
 
-        mesaj = f"📍 {isim}\n\n"
+        yeni_durum = makine_durumu_olustur(makina)
+        yeni_durumlar[makina_id] = yeni_durum
 
-        for kutu in makina["binList"]:
+        eski_durum = eski_durumlar.get(makina_id)
 
-            durum = "✅ UYGUN" if kutu["state"] else "❌ DOLU"
+        if eski_durum is None:
+            mesaj = ilk_durum_mesaji_olustur(yeni_durum)
+            telegram_gonder(mesaj)
+            print(f"İlk durum kaydedildi: {isim}")
+            continue
 
-            mesaj += (
-                f"{kutu['contentType'].upper()} : "
-                f"{kutu['level']}% {durum}\n"
-            )
+        mesaj = degisiklik_mesaji_olustur(
+            isim,
+            eski_durum,
+            yeni_durum
+        )
 
-        telegram_gonder(mesaj)
+        if mesaj:
+            telegram_gonder(mesaj)
+            print(f"Durum değişikliği gönderildi: {isim}")
+        else:
+            print(f"Değişiklik yok: {isim}")
 
-    if not bulundu:
+    if not takip_edilen_bulundu:
         print("Takip edilen makine bulunamadı.")
+        return
+
+    # Önceki kayıtlardan API'de geçici olarak görünmeyen makineleri korur.
+    eski_durumlar.update(yeni_durumlar)
+    durumlari_kaydet(eski_durumlar)
+
+    print("status.json güncellendi.")
