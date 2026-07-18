@@ -3,9 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-
 URL = "https://portal.doa.gov.tr/depozito-iade-noktalari"
-
 
 def siteyi_test_et():
     options = Options()
@@ -22,8 +20,13 @@ def siteyi_test_et():
     try:
         driver.get(URL)
 
-        print("Başlık:", driver.title)
-        print("URL:", driver.current_url)
+        print("=" * 50)
+        print("DOA SAYFASI AÇILDI")
+        print("=" * 50)
+        print("Başlık :", driver.title)
+        print("URL     :", driver.current_url)
+        print("Sayfa Uzunluğu :", len(driver.page_source))
+        print("=" * 50)
 
     finally:
         driver.quit()
