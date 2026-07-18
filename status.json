@@ -4,20 +4,20 @@
     "address": "KÖPRÜBAŞI MAH KAVACIK CADDE No:12A/0 MUĞLA/ULA",
     "bins": {
       "aluminum": {
-        "level": 53,
+        "level": 49,
         "state": true
       },
       "glass": {
-        "level": 65,
-        "state": true
+        "level": 97,
+        "state": false
       },
       "pet": {
-        "level": 14,
+        "level": 31,
         "state": true
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-18T17:52:23.561482+03:00",
+    "lastChecked": "2026-07-18T18:11:21.588880+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-18T17:52:23.561343+03:00",
+    "lastChecked": "2026-07-18T18:11:21.588746+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-18T17:52:23.561263+03:00",
+    "lastChecked": "2026-07-18T18:11:21.588660+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -98,7 +98,7 @@
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-18T17:52:23.561077+03:00",
+    "lastChecked": "2026-07-18T18:11:21.588540+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -112,7 +112,7 @@
     "address": "AYAZKIYI MAH Rauf Gündüz Cad No:13\tA/1 MUĞLA/ULA",
     "bins": {
       "aluminum": {
-        "level": 91,
+        "level": 92,
         "state": false
       },
       "glass": {
@@ -125,7 +125,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-18T17:52:23.561416+03:00",
+    "lastChecked": "2026-07-18T18:11:21.588815+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -139,7 +139,7 @@
     "address": "CUMHURİYET MAH 166 SOK. No:6/1 MUĞLA/YATAĞAN",
     "bins": {
       "aluminum": {
-        "level": 60,
+        "level": 38,
         "state": true
       },
       "glass": {
@@ -147,12 +147,12 @@
         "state": false
       },
       "pet": {
-        "level": 33,
+        "level": 48,
         "state": true
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-18T17:52:23.561549+03:00",
+    "lastChecked": "2026-07-18T18:11:21.588950+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
