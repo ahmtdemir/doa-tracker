@@ -1,32 +1,37 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+import requests
 
-URL = "https://portal.doa.gov.tr/depozito-iade-noktalari"
+URL = "https://dbysmgw.doa.gov.tr/dbys/v3/web/rvm/search?pageNumber=1&pageSize=100"
+
+payload = {
+    "lat": 37.21596145629883,
+    "lon": 28.36799430847168,
+    "distance": 2466,
+    "userLat": 37.212301266949034,
+    "userLon": 28.354810181393365
+}
+
 
 def siteyi_test_et():
-    options = Options()
+    response = requests.post(URL, json=payload)
 
-    options.add_argument("--headless=new")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
+    data = response.json()
 
-    driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()),
-        options=options
-    )
+    print("=" * 50)
+    print("Makine Sayısı:", len(data["rvmList"]))
+    print("=" * 50)
 
-    try:
-        driver.get(URL)
+    for makina in data["rvmList"]:
 
-        print("=" * 50)
-        print("DOA SAYFASI AÇILDI")
-        print("=" * 50)
-        print("Başlık :", driver.title)
-        print("URL     :", driver.current_url)
-        print("Sayfa Uzunluğu :", len(driver.page_source))
-        print("=" * 50)
+        print()
+        print(makina["definition"]["name"])
 
-    finally:
-        driver.quit()
+        for kutu in makina["binList"]:
+
+            durum = "UYGUN" if kutu["state"] else "DOLU"
+
+            print(
+                kutu["contentType"],
+                kutu["level"],
+                "%",
+                durum
+            )
