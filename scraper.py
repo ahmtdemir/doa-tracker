@@ -32,7 +32,7 @@ for nokta in SEARCH_POINTS:
 
     bulundu = False
 
-    for makina in data["rvmList"]:
+   for makina in tum_makineler.values():
 
         isim = makina["definition"]["name"]
 
