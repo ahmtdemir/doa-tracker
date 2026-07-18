@@ -1,4 +1,23 @@
 {
+  "293c88df-f8ae-48c6-9f94-3e04f8d1c6fb": {
+    "bins": {
+      "aluminum": {
+        "level": 45,
+        "state": true
+      },
+      "glass": {
+        "level": 97,
+        "state": false
+      },
+      "pet": {
+        "level": 74,
+        "state": true
+      }
+    },
+    "label": "Ula",
+    "name": "A101 I821 KÖPRÜBAŞI",
+    "type": "early_warning"
+  },
   "5f128577-b5a5-4642-93b6-f94d5833b10b": {
     "bins": {
       "aluminum": {
@@ -14,12 +33,71 @@
         "state": false
       }
     },
-    "name": "MİGROS MUĞLA MM MİGROS"
+    "label": "Muğla Merkez",
+    "name": "MİGROS MUĞLA MM MİGROS",
+    "type": "target"
   },
   "639ed9ca-b5b3-419c-bec5-6f5296211cbe": {
     "bins": {
       "aluminum": {
-        "level": 44,
+        "level": 94,
+        "state": false
+      },
+      "glass": {
+        "level": 97,
+        "state": false
+      },
+      "pet": {
+        "level": 90,
+        "state": false
+      }
+    },
+    "label": "Muğla Merkez",
+    "name": "Q681 BİM NERGİS / MENTEŞE - MUĞLA",
+    "type": "target"
+  },
+  "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
+    "bins": {
+      "aluminum": {
+        "level": 61,
+        "state": true
+      },
+      "glass": {
+        "level": 41,
+        "state": true
+      },
+      "pet": {
+        "level": 97,
+        "state": false
+      }
+    },
+    "label": "Milas",
+    "name": "BİM-AYDINLIKEVLER",
+    "type": "early_warning"
+  },
+  "fb151f25-cad7-40f5-bffd-ba8c597e6ab5": {
+    "bins": {
+      "aluminum": {
+        "level": 92,
+        "state": false
+      },
+      "glass": {
+        "level": 97,
+        "state": false
+      },
+      "pet": {
+        "level": 100,
+        "state": false
+      }
+    },
+    "label": "Ula",
+    "name": "BİM-ULA",
+    "type": "early_warning"
+  },
+  "ff68d07b-7e2d-4c2a-a61d-ba63a61c410f": {
+    "bins": {
+      "aluminum": {
+        "level": 65,
         "state": true
       },
       "glass": {
@@ -31,23 +109,8 @@
         "state": false
       }
     },
-    "name": "Q681 BİM NERGİS / MENTEŞE - MUĞLA"
-  },
-  "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
-    "bins": {
-      "aluminum": {
-        "level": 63,
-        "state": true
-      },
-      "glass": {
-        "level": 36,
-        "state": true
-      },
-      "pet": {
-        "level": 67,
-        "state": true
-      }
-    },
-    "name": "BİM-AYDINLIKEVLER"
+    "label": "Yatağan",
+    "name": "D247 BİM YATAĞAN / YATAĞAN - MUĞLA",
+    "type": "early_warning"
   }
 }
