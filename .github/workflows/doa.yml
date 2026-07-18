@@ -6,6 +6,7 @@ on:
   schedule:
     - cron: "*/5 * * * *"
     - cron: "2,7,12,17,22,27,32,37,42,47,52,57 * * * *"
+
 permissions:
   contents: write
 
@@ -28,29 +29,95 @@ jobs:
 
       - name: Gerekli paketleri yükle
         run: pip install -r requirements.txt
-      
-      - name: Başlangıç zamanı
+
+      - name: Çalışma zamanını kaydet
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          GITHUB_WORKFLOW_NAME: ${{ github.workflow }}
         run: |
-          echo "UTC:   $(date -u)"
-          echo "Local: $(date)"
-          echo "GitHub Event: ${{ github.event_name }}"
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from zoneinfo import ZoneInfo
+          from pathlib import Path
+
+          history_file = Path("workflow_runs.jsonl")
+
+          now_utc = datetime.now(timezone.utc)
+          now_tr = now_utc.astimezone(ZoneInfo("Europe/Istanbul"))
+
+          previous_time = None
+
+          if history_file.exists():
+              lines = [
+                  line.strip()
+                  for line in history_file.read_text(encoding="utf-8").splitlines()
+                  if line.strip()
+              ]
+
+              if lines:
+                  try:
+                      previous_record = json.loads(lines[-1])
+                      previous_time = datetime.fromisoformat(
+                          previous_record["startedAtUtc"]
+                      )
+                  except (json.JSONDecodeError, KeyError, ValueError):
+                      previous_time = None
+
+          gap_minutes = None
+
+          if previous_time is not None:
+              gap_minutes = round(
+                  (now_utc - previous_time).total_seconds() / 60,
+                  2
+              )
+
+          record = {
+              "runNumber": os.environ.get("GITHUB_RUN_NUMBER"),
+              "event": os.environ.get("GITHUB_EVENT_NAME"),
+              "workflow": os.environ.get("GITHUB_WORKFLOW_NAME"),
+              "startedAtUtc": now_utc.isoformat(),
+              "startedAtTurkey": now_tr.isoformat(),
+              "minutesSincePreviousRun": gap_minutes
+          }
+
+          with history_file.open("a", encoding="utf-8") as file:
+              file.write(
+                  json.dumps(record, ensure_ascii=False) + "\n"
+              )
+
+          print("=======================================")
+          print(f"Event             : {record['event']}")
+          print(f"Run Number        : {record['runNumber']}")
+          print(f"UTC               : {record['startedAtUtc']}")
+          print(f"Türkiye           : {record['startedAtTurkey']}")
+
+          if gap_minutes is None:
+              print("Önceki çalışma    : İlk kayıt")
+          else:
+              print(f"Geçen süre        : {gap_minutes} dakika")
+
+          print("=======================================")
+          PY
 
       - name: DOA kontrolünü çalıştır
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python main.py
-      
+
       - name: Durum ve geçmiş dosyalarını kaydet
         run: |
-          if [ -z "$(git status --porcelain -- status.json machine_history.jsonl)" ]; then
-            echo "Kaydedilecek durum veya geçmiş değişikliği yok."
+          if [ -z "$(git status --porcelain -- status.json machine_history.jsonl workflow_runs.jsonl)" ]; then
+            echo "Kaydedilecek değişiklik yok."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add status.json machine_history.jsonl
-          git commit -m "Update DOA machine status and history"
+          git add status.json machine_history.jsonl workflow_runs.jsonl
+          git commit -m "Update DOA status, history and workflow timing"
           git push
