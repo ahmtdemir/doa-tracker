@@ -23,8 +23,8 @@ def metni_normalize_et(metin):
 
 def makina_kuralini_bul(makina_ismi):
     """
-    Makine adı, config.py içindeki isimlerden biriyle eşleşiyorsa
-    o makinenin kesin bölge ve tür bilgisini döndürür.
+    Makine adı config.py içindeki kurallardan biriyle eşleşiyorsa
+    kesin bölge ve takip türünü döndürür.
     """
 
     normalize_isim = metni_normalize_et(makina_ismi)
@@ -43,9 +43,9 @@ def makina_siniflandir(makina_ismi, bulundugu_bolgeler):
     """
     Öncelik sırası:
 
-    1. İsmi config.py içinde açıkça tanımlanmış makineler
-    2. Ula veya Yatağan sorgusunda bulunan makineler
-    3. Bunların dışındaki makineler takip edilmez
+    1. config.py içinde adı açıkça tanımlanmış makineler
+    2. Ula veya Yatağan arama bölgesinde bulunan makineler
+    3. Diğer makineler takip edilmez
     """
 
     kesin_kural = makina_kuralini_bul(makina_ismi)
@@ -88,7 +88,7 @@ def makina_durumu_olustur(makina, siniflandirma):
     for kutu in makina.get("binList", []):
         kutu_turu = str(
             kutu.get("contentType", "unknown")
-        ).lower()
+        ).strip().lower()
 
         if kutu_turu not in TAKIP_KUTULARI:
             continue
@@ -104,13 +104,27 @@ def makina_durumu_olustur(makina, siniflandirma):
 def baslik_olustur(yeni_durum):
     if yeni_durum["type"] == "target":
         return (
-            f"🎯 MUĞLA MERKEZ HEDEFİ\n"
+            "🎯 MUĞLA MERKEZ HEDEFİ\n"
             f"📌 Bölge: {yeni_durum['label']}"
         )
 
     return (
         f"🚨 ERKEN UYARI — {yeni_durum['label'].upper()}\n"
-        f"Muğla merkez için ekip hareketi olabilir."
+        "Muğla merkez için ekip hareketi olabilir."
+    )
+
+
+def kutu_adi_duzenle(kutu_turu):
+    isimler = {
+        "pet": "PET",
+        "glass": "GLASS",
+        "aluminum": "ALUMINUM",
+        "can": "ALUMINUM",
+    }
+
+    return isimler.get(
+        kutu_turu,
+        kutu_turu.upper(),
     )
 
 
@@ -132,7 +146,7 @@ def ilk_durum_mesaji_olustur(yeni_durum):
         )
 
         satirlar.append(
-            f"{kutu_turu.upper()} : "
+            f"{kutu_adi_duzenle(kutu_turu)}: "
             f"%{kutu['level']} {durum_metni}"
         )
 
@@ -152,7 +166,8 @@ def degisiklik_mesaji_olustur(eski_durum, yeni_durum):
     eski_kutular = eski_durum.get("bins", {})
     yeni_kutular = yeni_durum.get("bins", {})
 
-    degisiklik_satirlari = []
+    degisen_kutular = []
+    bildirim_gerekli = False
 
     for kutu_turu, yeni_kutu in yeni_kutular.items():
         eski_kutu = eski_kutular.get(kutu_turu)
@@ -160,29 +175,87 @@ def degisiklik_mesaji_olustur(eski_durum, yeni_durum):
         if eski_kutu is None:
             continue
 
-        eski_state = bool(eski_kutu.get("state", False))
-        yeni_state = bool(yeni_kutu.get("state", False))
+        eski_state = bool(
+            eski_kutu.get("state", False)
+        )
+        yeni_state = bool(
+            yeni_kutu.get("state", False)
+        )
 
-        # Yalnızca UYGUN / DOLU durumu değiştiğinde mesaj gönder.
+        # UYGUN / DOLU durumu değişmediyse
+        # bildirim sebebi oluşturmaz.
         if eski_state == yeni_state:
             continue
 
-        eski_seviye = eski_kutu.get("level", 0)
-        yeni_seviye = yeni_kutu.get("level", 0)
+        # Erken uyarı makinelerinde sadece
+        # DOLU -> UYGUN değişimi bildirim oluşturur.
+        if (
+            yeni_durum["type"] == "early_warning"
+            and not yeni_state
+        ):
+            print(
+                "Erken uyarı bildirimi atlandı: "
+                f"{yeni_durum['label']} / "
+                f"{yeni_durum['name']} / "
+                f"{kutu_adi_duzenle(kutu_turu)} "
+                "artık dolu"
+            )
+            continue
 
-        if yeni_state:
-            durum_metni = "✅ ARTIK UYGUN"
-        else:
-            durum_metni = "❌ ARTIK DOLU"
+        bildirim_gerekli = True
+        degisen_kutular.append(kutu_turu)
 
-        degisiklik_satirlari.extend([
-            f"{kutu_turu.upper()} : {durum_metni}",
-            f"%{eski_seviye} → %{yeni_seviye}",
-            "",
-        ])
-
-    if not degisiklik_satirlari:
+    if not bildirim_gerekli:
         return None
+
+    durum_satirlari = []
+
+    for kutu_turu, yeni_kutu in yeni_kutular.items():
+        kutu_adi = kutu_adi_duzenle(
+            kutu_turu
+        )
+
+        yeni_state = bool(
+            yeni_kutu.get("state", False)
+        )
+        yeni_seviye = yeni_kutu.get(
+            "level",
+            0,
+        )
+
+        eski_kutu = eski_kutular.get(
+            kutu_turu,
+            {},
+        )
+
+        eski_seviye = eski_kutu.get(
+            "level",
+            0,
+        )
+
+        if kutu_turu in degisen_kutular:
+            if yeni_state:
+                durum_metni = "✅ ARTIK UYGUN"
+            else:
+                durum_metni = "❌ ARTIK DOLU"
+
+            durum_satirlari.extend([
+                f"{kutu_adi}: {durum_metni}",
+                f"%{eski_seviye} → %{yeni_seviye}",
+                "",
+            ])
+
+        else:
+            durum_metni = (
+                "✅ UYGUN"
+                if yeni_state
+                else "❌ DOLU"
+            )
+
+            durum_satirlari.append(
+                f"{kutu_adi}: "
+                f"%{yeni_seviye} {durum_metni}"
+            )
 
     saat = datetime.now(TURKIYE_SAATI).strftime(
         "%d.%m.%Y %H:%M"
@@ -195,7 +268,8 @@ def degisiklik_mesaji_olustur(eski_durum, yeni_durum):
         "",
         f"📍 {yeni_durum['name']}",
         "",
-        *degisiklik_satirlari,
+        *durum_satirlari,
+        "",
         f"🕒 {saat}",
     ]
 
@@ -204,16 +278,20 @@ def degisiklik_mesaji_olustur(eski_durum, yeni_durum):
 
 def makineleri_api_den_al():
     """
-    Tüm arama noktalarını sorgular.
+    SEARCH_POINTS içindeki bütün arama noktalarını sorgular.
 
-    Aynı makine birden fazla bölgede görünürse ID üzerinden
-    tek kayıtta birleştirir ve görüldüğü bölgeleri saklar.
+    Aynı makine birden fazla bölgede görünürse makine ID'si
+    üzerinden tekilleştirir ve görüldüğü bölgeleri saklar.
     """
 
     tum_makineler = {}
 
     for nokta in SEARCH_POINTS:
         bolge_adi = nokta["name"]
+        bolge_etiketi = nokta.get(
+            "label",
+            bolge_adi,
+        )
 
         payload = {
             "lat": nokta["lat"],
@@ -235,25 +313,32 @@ def makineleri_api_den_al():
 
         except requests.RequestException as hata:
             print(
-                f"API Hatası ({nokta['label']}): {hata}"
+                f"API Hatası "
+                f"({bolge_etiketi}): {hata}"
             )
             continue
 
         except ValueError:
             print(
-                f"Geçersiz JSON cevabı: {nokta['label']}"
+                "Geçersiz JSON cevabı: "
+                f"{bolge_etiketi}"
             )
             continue
 
-        makineler = data.get("rvmList", [])
+        makineler = data.get(
+            "rvmList",
+            [],
+        )
 
         print(
-            f"{nokta['label']} sorgusu: "
+            f"{bolge_etiketi} sorgusu: "
             f"{len(makineler)} makine"
         )
 
         for makina in makineler:
-            makina_id = str(makina.get("id", "")).strip()
+            makina_id = str(
+                makina.get("id", "")
+            ).strip()
 
             if not makina_id:
                 continue
@@ -275,7 +360,7 @@ def siteyi_test_et():
     tum_makineler = makineleri_api_den_al()
 
     print(
-        f"Tekilleştirilmiş toplam makine: "
+        "Tekilleştirilmiş toplam makine: "
         f"{len(tum_makineler)}"
     )
 
@@ -301,7 +386,6 @@ def siteyi_test_et():
             bulundugu_bolgeler,
         )
 
-        # Muğla hedefi, Milas, Ula veya Yatağan değilse izleme.
         if siniflandirma is None:
             continue
 
@@ -314,7 +398,9 @@ def siteyi_test_et():
 
         yeni_durumlar[makina_id] = yeni_durum
 
-        eski_durum = eski_durumlar.get(makina_id)
+        eski_durum = eski_durumlar.get(
+            makina_id
+        )
 
         if eski_durum is None:
             mesaj = ilk_durum_mesaji_olustur(
@@ -324,7 +410,7 @@ def siteyi_test_et():
             telegram_gonder(mesaj)
 
             print(
-                f"İlk durum kaydedildi: "
+                "İlk durum kaydedildi: "
                 f"{siniflandirma['label']} / "
                 f"{makina_ismi}"
             )
@@ -339,29 +425,35 @@ def siteyi_test_et():
             telegram_gonder(mesaj)
 
             print(
-                f"Durum değişikliği gönderildi: "
+                "Durum değişikliği gönderildi: "
                 f"{siniflandirma['label']} / "
                 f"{makina_ismi}"
             )
         else:
             print(
-                f"Değişiklik yok: "
+                "Bildirim gerektiren değişiklik yok: "
                 f"{siniflandirma['label']} / "
                 f"{makina_ismi}"
             )
 
     if takip_edilen_sayi == 0:
-        print("Takip edilecek makine bulunamadı.")
+        print(
+            "Takip edilecek makine bulunamadı."
+        )
         return
 
-    # API'de geçici olarak görünmeyen eski makinelerin
-    # kayıtlarını silmeden korur.
-    eski_durumlar.update(yeni_durumlar)
+    # API'de geçici olarak görünmeyen eski makineleri
+    # silmeden korur.
+    eski_durumlar.update(
+        yeni_durumlar
+    )
 
-    durumlari_kaydet(eski_durumlar)
+    durumlari_kaydet(
+        eski_durumlar
+    )
 
     print(
-        f"Takip edilen makine sayısı: "
+        "Takip edilen makine sayısı: "
         f"{takip_edilen_sayi}"
     )
     print("status.json güncellendi.")
