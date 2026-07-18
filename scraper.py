@@ -428,10 +428,14 @@ def siteyi_test_et():
 
         yeni_durumlar[makina_id] = yeni_durum
 
-        eski_durum = eski_durumlar.get(
-            makina_id
+        gecmis_kaydi_ekle(
+            makina_id,
+             yeni_durum,
         )
 
+        eski_durum = eski_durumlar.get(
+             makina_id
+         )
         if eski_durum is None:
             mesaj = ilk_durum_mesaji_olustur(
                 yeni_durum
