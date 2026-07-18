@@ -1,11 +1,28 @@
 import requests
-from config import API_URL, PAYLOAD, TAKIP_MAKINELERI
+from config import API_URL, SEARCH_POINTS, TAKIP_MAKINELERI
 from telegram import telegram_gonder
 
 
 def siteyi_test_et():
 
-    response = requests.post(API_URL, json=PAYLOAD, timeout=20)
+    tum_makineler = {}
+
+for nokta in SEARCH_POINTS:
+
+    response = requests.post(
+        API_URL,
+        json=nokta,
+        timeout=20
+    )
+
+    if response.status_code != 200:
+        continue
+
+    data = response.json()
+
+    for makina in data["rvmList"]:
+
+        tum_makineler[makina["id"]] = makina
 
     if response.status_code != 200:
         print("API Hatası:", response.status_code)
