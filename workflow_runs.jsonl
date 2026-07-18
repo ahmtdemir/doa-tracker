@@ -1,1 +1,2 @@
 {"runNumber": "29", "event": "workflow_dispatch", "workflow": "DOA Takip Sistemi", "startedAtUtc": "2026-07-18T20:48:03.406605+00:00", "startedAtTurkey": "2026-07-18T23:48:03.406605+03:00", "minutesSincePreviousRun": null}
+{"runNumber": "30", "event": "schedule", "workflow": "DOA Takip Sistemi", "startedAtUtc": "2026-07-18T20:52:53.183343+00:00", "startedAtTurkey": "2026-07-18T23:52:53.183343+03:00", "minutesSincePreviousRun": 4.83}
