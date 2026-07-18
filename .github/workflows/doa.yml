@@ -6,6 +6,13 @@ on:
   schedule:
     - cron: "*/5 * * * *"
 
+permissions:
+  contents: write
+
+concurrency:
+  group: doa-takip
+  cancel-in-progress: false
+
 jobs:
   doa-kontrol:
     runs-on: ubuntu-latest
@@ -27,3 +34,17 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python main.py
+
+      - name: Durum dosyasını kaydet
+        run: |
+          if git diff --quiet status.json; then
+            echo "status.json değişmedi."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add status.json
+          git commit -m "Update DOA machine status"
+          git push
