@@ -10,8 +10,8 @@ SEARCH_POINTS = [
         "lat": 37.21596145629883,
         "lon": 28.36799430847168,
         "distance": 15000,
-        "userLat": 37.21596145629883,
-        "userLon": 28.36799430847168,
+        "userLat": 37.212301266949034,
+        "userLon": 28.354810181393365,
     },
     {
         "name": "ULA",
@@ -56,5 +56,6 @@ OTOMATIK_ERKEN_UYARI_BOLGELERI = {
 TAKIP_KUTULARI = {
     "pet",
     "glass",
+    "can",
     "aluminum",
 }
