@@ -1,1 +1,53 @@
-{}
+{
+  "5f128577-b5a5-4642-93b6-f94d5833b10b": {
+    "bins": {
+      "aluminum": {
+        "level": 93,
+        "state": false
+      },
+      "glass": {
+        "level": 97,
+        "state": false
+      },
+      "pet": {
+        "level": 97,
+        "state": false
+      }
+    },
+    "name": "MİGROS MUĞLA MM MİGROS"
+  },
+  "639ed9ca-b5b3-419c-bec5-6f5296211cbe": {
+    "bins": {
+      "aluminum": {
+        "level": 94,
+        "state": false
+      },
+      "glass": {
+        "level": 97,
+        "state": false
+      },
+      "pet": {
+        "level": 90,
+        "state": false
+      }
+    },
+    "name": "Q681 BİM NERGİS / MENTEŞE - MUĞLA"
+  },
+  "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
+    "bins": {
+      "aluminum": {
+        "level": 42,
+        "state": true
+      },
+      "glass": {
+        "level": 32,
+        "state": true
+      },
+      "pet": {
+        "level": 94,
+        "state": false
+      }
+    },
+    "name": "BİM-AYDINLIKEVLER"
+  }
+}
