@@ -19,8 +19,8 @@
   "639ed9ca-b5b3-419c-bec5-6f5296211cbe": {
     "bins": {
       "aluminum": {
-        "level": 94,
-        "state": false
+        "level": 44,
+        "state": true
       },
       "glass": {
         "level": 97,
@@ -36,16 +36,16 @@
   "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
     "bins": {
       "aluminum": {
-        "level": 43,
+        "level": 63,
         "state": true
       },
       "glass": {
-        "level": 31,
+        "level": 36,
         "state": true
       },
       "pet": {
-        "level": 94,
-        "state": false
+        "level": 67,
+        "state": true
       }
     },
     "name": "BİM-AYDINLIKEVLER"
