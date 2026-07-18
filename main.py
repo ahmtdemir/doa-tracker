@@ -1,17 +1,5 @@
-import os
-import requests
+from scraper import siteyi_test_et
 
-TOKEN = os.environ.get("TELEGRAM_TOKEN")
-CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+print("DOA Tracker başladı...")
 
-url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-
-payload = {
-    "chat_id": CHAT_ID,
-    "text": "✅ GitHub Actions başarıyla çalışıyor!"
-}
-
-response = requests.post(url, json=payload)
-
-print(response.status_code)
-print(response.text)
+siteyi_test_et()
