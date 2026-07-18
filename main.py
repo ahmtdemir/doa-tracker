@@ -1,0 +1,1 @@
+print("DOA Tracker başlatıldı.")
