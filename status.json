@@ -2,15 +2,15 @@
   "293c88df-f8ae-48c6-9f94-3e04f8d1c6fb": {
     "bins": {
       "aluminum": {
-        "level": 45,
+        "level": 40,
         "state": true
       },
       "glass": {
-        "level": 97,
-        "state": false
+        "level": 65,
+        "state": true
       },
       "pet": {
-        "level": 74,
+        "level": 75,
         "state": true
       }
     },
@@ -59,11 +59,11 @@
   "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
     "bins": {
       "aluminum": {
-        "level": 61,
+        "level": 63,
         "state": true
       },
       "glass": {
-        "level": 41,
+        "level": 46,
         "state": true
       },
       "pet": {
@@ -78,7 +78,7 @@
   "fb151f25-cad7-40f5-bffd-ba8c597e6ab5": {
     "bins": {
       "aluminum": {
-        "level": 92,
+        "level": 91,
         "state": false
       },
       "glass": {
@@ -97,7 +97,7 @@
   "ff68d07b-7e2d-4c2a-a61d-ba63a61c410f": {
     "bins": {
       "aluminum": {
-        "level": 65,
+        "level": 66,
         "state": true
       },
       "glass": {
@@ -105,8 +105,8 @@
         "state": false
       },
       "pet": {
-        "level": 90,
-        "state": false
+        "level": 76,
+        "state": true
       }
     },
     "label": "Yatağan",
