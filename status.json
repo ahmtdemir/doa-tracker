@@ -36,11 +36,11 @@
   "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
     "bins": {
       "aluminum": {
-        "level": 42,
+        "level": 43,
         "state": true
       },
       "glass": {
-        "level": 32,
+        "level": 31,
         "state": true
       },
       "pet": {
