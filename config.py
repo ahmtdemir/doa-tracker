@@ -1,29 +1,60 @@
-BOT_TOKEN = "8686464914:AAFLYm-zhY5wggUbbouXLKqDIMEtRFr6gFI"
-CHAT_ID = "868647307"
-
-API_URL = "https://dbysmgw.doa.gov.tr/dbys/v3/web/rvm/search?pageNumber=1&pageSize=100"
+API_URL = (
+    "https://dbysmgw.doa.gov.tr/"
+    "dbys/v3/web/rvm/search?pageNumber=1&pageSize=100"
+)
 
 SEARCH_POINTS = [
     {
-        "name": "Milas",
+        "name": "MENTESE",
+        "label": "Muğla Merkez",
         "lat": 37.21596145629883,
         "lon": 28.36799430847168,
-        "distance": 10000,
-        "userLat": 37.212301266949034,
-        "userLon": 28.354810181393365,
+        "distance": 15000,
+        "userLat": 37.21596145629883,
+        "userLon": 28.36799430847168,
     },
     {
-        "name": "Menteşe",
-        "lat": 37.19468688964844,
-        "lon": 28.38709831237793,
-        "distance": 10000,
-        "userLat": 37.212301266949034,
-        "userLon": 28.354810181393365,
-    }
+        "name": "ULA",
+        "label": "Ula",
+        "lat": 37.1030,
+        "lon": 28.4160,
+        "distance": 15000,
+        "userLat": 37.1030,
+        "userLon": 28.4160,
+    },
+    {
+        "name": "YATAGAN",
+        "label": "Yatağan",
+        "lat": 37.3400,
+        "lon": 28.1400,
+        "distance": 15000,
+        "userLat": 37.3400,
+        "userLon": 28.1400,
+    },
 ]
 
-TAKIP_MAKINELERI = [
-    "Q681 BİM NERGİS / MENTEŞE - MUĞLA",
-    "BİM-AYDINLIKEVLER",
-    "MİGROS MUĞLA MM MİGROS"
-]
+MAKINE_KURALLARI = {
+    "Q681 BİM NERGİS": {
+        "label": "Muğla Merkez",
+        "type": "target",
+    },
+    "MİGROS MUĞLA": {
+        "label": "Muğla Merkez",
+        "type": "target",
+    },
+    "BİM-AYDINLIKEVLER": {
+        "label": "Milas",
+        "type": "early_warning",
+    },
+}
+
+OTOMATIK_ERKEN_UYARI_BOLGELERI = {
+    "ULA",
+    "YATAGAN",
+}
+
+TAKIP_KUTULARI = {
+    "pet",
+    "glass",
+    "aluminum",
+}
