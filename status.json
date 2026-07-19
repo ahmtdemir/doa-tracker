@@ -11,6 +11,7 @@
         "level": 94,
         "samples": [
           94,
+          94,
           94
         ],
         "state": false
@@ -22,6 +23,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97
         ],
@@ -35,13 +37,14 @@
         "level": 92,
         "samples": [
           92,
+          92,
           92
         ],
         "state": false
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T23:24:46.494312+03:00",
+    "lastChecked": "2026-07-19T23:26:03.500916+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -63,6 +66,7 @@
         "level": 93,
         "samples": [
           93,
+          93,
           93
         ],
         "state": false
@@ -74,6 +78,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97
         ],
@@ -87,13 +92,14 @@
         "level": 97,
         "samples": [
           97,
+          97,
           97
         ],
         "state": false
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T23:24:45.414107+03:00",
+    "lastChecked": "2026-07-19T23:26:02.486078+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -115,6 +121,7 @@
         "level": 92,
         "samples": [
           92,
+          92,
           92
         ],
         "state": false
@@ -126,6 +133,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97
         ],
@@ -139,13 +147,14 @@
         "level": 91,
         "samples": [
           91,
+          91,
           91
         ],
         "state": false
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T23:24:44.911820+03:00",
+    "lastChecked": "2026-07-19T23:26:01.960359+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -167,6 +176,7 @@
         "level": 82,
         "samples": [
           82,
+          82,
           82
         ],
         "state": true
@@ -178,6 +188,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97
         ],
@@ -191,13 +202,14 @@
         "level": 100,
         "samples": [
           100,
+          100,
           100
         ],
         "state": false
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T23:24:44.363492+03:00",
+    "lastChecked": "2026-07-19T23:26:01.389921+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -219,6 +231,7 @@
         "level": 91,
         "samples": [
           91,
+          91,
           91
         ],
         "state": false
@@ -230,6 +243,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97
         ],
@@ -243,19 +257,20 @@
         "level": 100,
         "samples": [
           100,
+          100,
           100
         ],
         "state": false
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T23:24:45.985622+03:00",
+    "lastChecked": "2026-07-19T23:26:02.986065+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
-    "machineStatus": 0,
+    "machineStatus": 2,
     "name": "BİM-ULA",
-    "openingClosingHours": "09:00 'da açılıyor",
-    "status": 2,
+    "openingClosingHours": null,
+    "status": 4,
     "telegramMessageId": 56,
     "type": "early_warning"
   },
@@ -268,10 +283,11 @@
         "candidateCount": 0,
         "confirmedBand": "filling",
         "filteredLevel": 46,
-        "level": 46,
+        "level": 53,
         "samples": [
           46,
-          46
+          46,
+          53
         ],
         "state": true
       },
@@ -282,6 +298,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97
         ],
@@ -295,13 +312,14 @@
         "level": 98,
         "samples": [
           98,
+          98,
           98
         ],
         "state": false
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T23:24:46.969547+03:00",
+    "lastChecked": "2026-07-19T23:26:04.101124+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
