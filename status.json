@@ -12,6 +12,7 @@
         "samples": [
           94,
           94,
+          94,
           94
         ],
         "state": false
@@ -23,6 +24,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97,
           97
@@ -38,20 +40,22 @@
         "samples": [
           92,
           92,
+          92,
           92
         ],
         "state": false
       }
     },
+    "cardVersion": 2,
     "label": "Ula",
-    "lastChecked": "2026-07-19T23:26:03.500916+03:00",
+    "lastChecked": "2026-07-19T23:27:11.312668+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
     "name": "A101 I821 KÖPRÜBAŞI",
     "openingClosingHours": "09:00 'da açılıyor",
     "status": 2,
-    "telegramMessageId": 57,
+    "telegramMessageId": 63,
     "type": "early_warning"
   },
   "5f128577-b5a5-4642-93b6-f94d5833b10b": {
@@ -67,6 +71,7 @@
         "samples": [
           93,
           93,
+          93,
           93
         ],
         "state": false
@@ -78,6 +83,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97,
           97
@@ -93,20 +99,22 @@
         "samples": [
           97,
           97,
+          97,
           97
         ],
         "state": false
       }
     },
+    "cardVersion": 2,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T23:26:02.486078+03:00",
+    "lastChecked": "2026-07-19T23:27:10.481026+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
     "name": "MİGROS MUĞLA MM MİGROS",
     "openingClosingHours": "08:30 'da açılıyor",
     "status": 2,
-    "telegramMessageId": 55,
+    "telegramMessageId": 61,
     "type": "target"
   },
   "639ed9ca-b5b3-419c-bec5-6f5296211cbe": {
@@ -122,6 +130,7 @@
         "samples": [
           92,
           92,
+          92,
           92
         ],
         "state": false
@@ -133,6 +142,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97,
           97
@@ -148,20 +158,22 @@
         "samples": [
           91,
           91,
+          91,
           91
         ],
         "state": false
       }
     },
+    "cardVersion": 2,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T23:26:01.960359+03:00",
+    "lastChecked": "2026-07-19T23:27:10.150443+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
     "name": "Q681 BİM NERGİS / MENTEŞE - MUĞLA",
     "openingClosingHours": "09:00 'da açılıyor",
     "status": 2,
-    "telegramMessageId": 54,
+    "telegramMessageId": 60,
     "type": "target"
   },
   "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
@@ -177,6 +189,7 @@
         "samples": [
           82,
           82,
+          82,
           82
         ],
         "state": true
@@ -188,6 +201,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97,
           97
@@ -203,20 +217,22 @@
         "samples": [
           100,
           100,
+          100,
           100
         ],
         "state": false
       }
     },
+    "cardVersion": 2,
     "label": "Milas",
-    "lastChecked": "2026-07-19T23:26:01.389921+03:00",
+    "lastChecked": "2026-07-19T23:27:09.808065+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
     "name": "BİM-AYDINLIKEVLER",
     "openingClosingHours": "09:00 'da açılıyor",
     "status": 2,
-    "telegramMessageId": 53,
+    "telegramMessageId": 59,
     "type": "early_warning"
   },
   "fb151f25-cad7-40f5-bffd-ba8c597e6ab5": {
@@ -232,6 +248,7 @@
         "samples": [
           91,
           91,
+          91,
           91
         ],
         "state": false
@@ -243,6 +260,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97,
           97
@@ -258,20 +276,22 @@
         "samples": [
           100,
           100,
+          100,
           100
         ],
         "state": false
       }
     },
+    "cardVersion": 2,
     "label": "Ula",
-    "lastChecked": "2026-07-19T23:26:02.986065+03:00",
+    "lastChecked": "2026-07-19T23:27:10.890157+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 2,
     "name": "BİM-ULA",
     "openingClosingHours": null,
     "status": 4,
-    "telegramMessageId": 56,
+    "telegramMessageId": 62,
     "type": "early_warning"
   },
   "ff68d07b-7e2d-4c2a-a61d-ba63a61c410f": {
@@ -282,11 +302,12 @@
         "candidateBand": null,
         "candidateCount": 0,
         "confirmedBand": "filling",
-        "filteredLevel": 46,
+        "filteredLevel": 50,
         "level": 53,
         "samples": [
           46,
           46,
+          53,
           53
         ],
         "state": true
@@ -298,6 +319,7 @@
         "filteredLevel": 97,
         "level": 97,
         "samples": [
+          97,
           97,
           97,
           97
@@ -313,20 +335,22 @@
         "samples": [
           98,
           98,
+          98,
           98
         ],
         "state": false
       }
     },
+    "cardVersion": 2,
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T23:26:04.101124+03:00",
+    "lastChecked": "2026-07-19T23:27:11.701895+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
     "name": "D247 BİM YATAĞAN / YATAĞAN - MUĞLA",
     "openingClosingHours": "09:00 'da açılıyor",
     "status": 2,
-    "telegramMessageId": 58,
+    "telegramMessageId": 64,
     "type": "early_warning"
   }
 }
