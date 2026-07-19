@@ -13,3 +13,4 @@
 {"runNumber": "41", "event": "schedule", "workflow": "DOA Takip Sistemi", "startedAtUtc": "2026-07-19T07:13:39.478127+00:00", "startedAtTurkey": "2026-07-19T10:13:39.478127+03:00", "minutesSincePreviousRun": 155.48}
 {"runNumber": "42", "event": "schedule", "workflow": "DOA Takip Sistemi", "startedAtUtc": "2026-07-19T07:16:12.381601+00:00", "startedAtTurkey": "2026-07-19T10:16:12.381601+03:00", "minutesSincePreviousRun": 2.55}
 {"runNumber": "43", "event": "schedule", "workflow": "DOA Takip Sistemi", "startedAtUtc": "2026-07-19T09:21:07.418221+00:00", "startedAtTurkey": "2026-07-19T12:21:07.418221+03:00", "minutesSincePreviousRun": 124.92}
+{"runNumber": "44", "event": "schedule", "workflow": "DOA Takip Sistemi", "startedAtUtc": "2026-07-19T09:22:41.683221+00:00", "startedAtTurkey": "2026-07-19T12:22:41.683221+03:00", "minutesSincePreviousRun": 1.57}
