@@ -17,7 +17,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T21:20:58.084877+03:00",
+    "lastChecked": "2026-07-19T21:26:15.962732+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T21:20:58.084720+03:00",
+    "lastChecked": "2026-07-19T21:26:15.962597+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T21:20:58.084587+03:00",
+    "lastChecked": "2026-07-19T21:26:15.962516+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -98,7 +98,7 @@
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T21:20:58.084463+03:00",
+    "lastChecked": "2026-07-19T21:26:15.962385+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -125,13 +125,13 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T21:20:58.084802+03:00",
+    "lastChecked": "2026-07-19T21:26:15.962666+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
-    "machineStatus": 2,
+    "machineStatus": 0,
     "name": "BİM-ULA",
-    "openingClosingHours": null,
-    "status": 4,
+    "openingClosingHours": "09:00 'da açılıyor",
+    "status": 2,
     "type": "early_warning"
   },
   "ff68d07b-7e2d-4c2a-a61d-ba63a61c410f": {
@@ -139,7 +139,7 @@
     "address": "CUMHURİYET MAH 166 SOK. No:6/1 MUĞLA/YATAĞAN",
     "bins": {
       "aluminum": {
-        "level": 54,
+        "level": 52,
         "state": true
       },
       "glass": {
@@ -147,12 +147,12 @@
         "state": false
       },
       "pet": {
-        "level": 98,
+        "level": 90,
         "state": false
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T21:20:58.084951+03:00",
+    "lastChecked": "2026-07-19T21:26:15.962798+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
