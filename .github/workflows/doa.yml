@@ -131,9 +131,73 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add status.json machine_history.jsonl workflow_runs.jsonl
-          git commit -m "Update DOA status, history and workflow timing"
+          TEMP_DIR="$(mktemp -d)"
+          export TEMP_DIR
 
-          echo "Uzak daldaki son değişiklikler alınıyor..."
-          git pull --rebase origin main
-          git push origin HEAD:main
+          for file in status.json machine_history.jsonl workflow_runs.jsonl; do
+            if [ -f "$file" ]; then
+              cp "$file" "$TEMP_DIR/$file"
+            fi
+          done
+
+          for attempt in 1 2 3; do
+            echo "Kayıt denemesi: $attempt/3"
+
+            git fetch origin main
+            git reset --hard origin/main
+
+            python - <<'PY'
+          import os
+          import shutil
+          from pathlib import Path
+
+          temp_dir = Path(os.environ["TEMP_DIR"])
+
+          local_status = temp_dir / "status.json"
+          if local_status.exists():
+              shutil.copyfile(local_status, Path("status.json"))
+
+          for filename in ("machine_history.jsonl", "workflow_runs.jsonl"):
+              remote_file = Path(filename)
+              local_file = temp_dir / filename
+
+              merged = []
+              seen = set()
+
+              for source in (remote_file, local_file):
+                  if not source.exists():
+                      continue
+
+                  for raw_line in source.read_text(encoding="utf-8").splitlines():
+                      line = raw_line.strip()
+                      if line and line not in seen:
+                          seen.add(line)
+                          merged.append(line)
+
+              if merged:
+                  remote_file.write_text(
+                      "\n".join(merged) + "\n",
+                      encoding="utf-8"
+                  )
+          PY
+
+            git add status.json machine_history.jsonl workflow_runs.jsonl
+
+            if git diff --cached --quiet; then
+              echo "Uzak dal zaten aynı verileri içeriyor."
+              exit 0
+            fi
+
+            git commit -m "Update DOA status, history and workflow timing"
+
+            if git push origin HEAD:main; then
+              echo "Dosyalar başarıyla kaydedildi."
+              exit 0
+            fi
+
+            echo "Push sırasında yeni commit geldi; tekrar deneniyor..."
+            sleep 2
+          done
+
+          echo "Dosyalar üç denemeden sonra kaydedilemedi."
+          exit 1
