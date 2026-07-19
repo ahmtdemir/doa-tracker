@@ -17,17 +17,17 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T22:00:03.373042+03:00",
+    "lastChecked": "2026-07-19T22:01:00.797940+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
-    "machineStatus": 0,
+    "machineStatus": 2,
     "name": "A101 I821 KÖPRÜBAŞI",
-    "openingClosingHours": "09:00 'da açılıyor",
-    "status": 2,
+    "openingClosingHours": null,
+    "status": 4,
     "type": "early_warning"
   },
   "5f128577-b5a5-4642-93b6-f94d5833b10b": {
-    "active": true,
+    "active": false,
     "address": "ORHANİYE MAH 103 NOLU SOKAK No:1/1 MUĞLA/MENTEŞE",
     "bins": {
       "aluminum": {
@@ -44,13 +44,13 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T22:00:03.372909+03:00",
+    "lastChecked": "2026-07-19T22:01:00.797861+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
     "name": "MİGROS MUĞLA MM MİGROS",
-    "openingClosingHours": "22:00 'da kapanıyor",
-    "status": 1,
+    "openingClosingHours": "08:30 'da açılıyor",
+    "status": 2,
     "type": "target"
   },
   "639ed9ca-b5b3-419c-bec5-6f5296211cbe": {
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T22:00:03.372833+03:00",
+    "lastChecked": "2026-07-19T22:01:00.797800+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -98,7 +98,7 @@
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T22:00:03.372678+03:00",
+    "lastChecked": "2026-07-19T22:01:00.797689+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -125,7 +125,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T22:00:03.372978+03:00",
+    "lastChecked": "2026-07-19T22:01:00.797905+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -147,12 +147,12 @@
         "state": false
       },
       "pet": {
-        "level": 90,
+        "level": 97,
         "state": false
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T22:00:03.373108+03:00",
+    "lastChecked": "2026-07-19T22:01:00.797981+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
