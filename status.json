@@ -17,7 +17,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T21:10:58.831629+03:00",
+    "lastChecked": "2026-07-19T21:15:59.766144+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T21:10:58.831500+03:00",
+    "lastChecked": "2026-07-19T21:15:59.766001+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T21:10:58.831426+03:00",
+    "lastChecked": "2026-07-19T21:15:59.765927+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -93,12 +93,12 @@
         "state": false
       },
       "pet": {
-        "level": 99,
+        "level": 100,
         "state": false
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T21:10:58.831275+03:00",
+    "lastChecked": "2026-07-19T21:15:59.765806+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -125,7 +125,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T21:10:58.831574+03:00",
+    "lastChecked": "2026-07-19T21:15:59.766070+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -147,12 +147,12 @@
         "state": false
       },
       "pet": {
-        "level": 91,
+        "level": 90,
         "state": false
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T21:10:58.831685+03:00",
+    "lastChecked": "2026-07-19T21:15:59.766211+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
