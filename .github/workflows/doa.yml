@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Projeyi indir
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Python kur
         uses: actions/setup-python@v5
@@ -131,4 +133,7 @@ jobs:
 
           git add status.json machine_history.jsonl workflow_runs.jsonl
           git commit -m "Update DOA status, history and workflow timing"
-          git push
+
+          echo "Uzak daldaki son değişiklikler alınıyor..."
+          git pull --rebase origin main
+          git push origin HEAD:main
