@@ -1,493 +1,189 @@
 from datetime import datetime
+from statistics import median
 from zoneinfo import ZoneInfo
-from status_manager import durumlari_yukle, durumlari_kaydet
-from history_manager import gecmis_kaydi_ekle
-from telegram import telegram_gonder
-
 import requests
-
-from config import (
-    API_URL,
-    SEARCH_POINTS,
-    MAKINE_KURALLARI,
-    OTOMATIK_ERKEN_UYARI_BOLGELERI,
-    TAKIP_KUTULARI,
-)
+from config import API_URL, SEARCH_POINTS, MAKINE_KURALLARI, OTOMATIK_ERKEN_UYARI_BOLGELERI, TAKIP_KUTULARI
+from history_manager import gecmis_kaydi_ekle
 from status_manager import durumlari_yukle, durumlari_kaydet
-from telegram import telegram_gonder
+from telegram import telegram_duzenle, telegram_gonder
+
+TZ = ZoneInfo("Europe/Istanbul")
+SAMPLE_COUNT = 5
+CONFIRM_COUNT = 3
 
 
-TURKIYE_SAATI = ZoneInfo("Europe/Istanbul")
+def norm(value):
+    return str(value or "").strip().upper()
 
 
-def metni_normalize_et(metin):
-    return str(metin or "").strip().upper()
-
-
-def makina_kuralini_bul(makina_ismi):
-    """
-    Makine adı config.py içindeki kurallardan biriyle eşleşiyorsa
-    kesin bölge ve takip türünü döndürür.
-    """
-
-    normalize_isim = metni_normalize_et(makina_ismi)
-
-    for aranan_isim, kural in MAKINE_KURALLARI.items():
-        if metni_normalize_et(aranan_isim) in normalize_isim:
-            return {
-                "label": kural["label"],
-                "type": kural["type"],
-            }
-
+def classify(name, regions):
+    normalized = norm(name)
+    for key, rule in MAKINE_KURALLARI.items():
+        if norm(key) in normalized:
+            return {"label": rule["label"], "type": rule["type"]}
+    for region in regions:
+        if region in OTOMATIK_ERKEN_UYARI_BOLGELERI:
+            label = next((p["label"] for p in SEARCH_POINTS if p["name"] == region), region)
+            return {"label": label, "type": "early_warning"}
     return None
 
 
-def makina_siniflandir(makina_ismi, bulundugu_bolgeler):
-    """
-    Öncelik sırası:
-
-    1. config.py içinde adı açıkça tanımlanmış makineler
-    2. Ula veya Yatağan arama bölgesinde bulunan makineler
-    3. Diğer makineler takip edilmez
-    """
-
-    kesin_kural = makina_kuralini_bul(makina_ismi)
-
-    if kesin_kural:
-        return kesin_kural
-
-    for bolge in bulundugu_bolgeler:
-        if bolge in OTOMATIK_ERKEN_UYARI_BOLGELERI:
-            bolge_etiketi = next(
-                (
-                    nokta["label"]
-                    for nokta in SEARCH_POINTS
-                    if nokta["name"] == bolge
-                ),
-                bolge,
-            )
-
-            return {
-                "label": bolge_etiketi,
-                "type": "early_warning",
-            }
-
-    return None
+def clamp(value):
+    try:
+        return max(0, min(100, int(round(float(value)))))
+    except (TypeError, ValueError):
+        return 0
 
 
-def makina_durumu_olustur(makina, siniflandirma):
-    """
-    API'den gelen makine ve hazne durumlarını status.json
-    ve geçmiş kayıt sistemi için standart yapıya dönüştürür.
+def band(level):
+    if level <= 20: return "empty"
+    if level <= 40: return "available"
+    if level <= 79: return "filling"
+    if level <= 89: return "nearly_full"
+    return "critical"
 
-    machineStatus, active ve status alanlarının anlamını
-    henüz yorumlamıyoruz; yalnızca veri topluyoruz.
-    """
 
-    isim = makina.get("definition", {}).get(
-        "name",
-        "Bilinmeyen Makine",
-    )
+def band_text(value):
+    return {
+        "empty": "✅ BOŞALTILMIŞ / ÇOK UYGUN",
+        "available": "✅ UYGUN",
+        "filling": "🟡 DOLUYOR",
+        "nearly_full": "🟠 DOLMAK ÜZERE",
+        "critical": "🚨 KRİTİK / DOLUM SINIRINDA",
+    }.get(value, "BİLİNMİYOR")
 
-    durum = {
-        "name": isim,
-        "label": siniflandirma["label"],
-        "type": siniflandirma["type"],
 
-        "address": makina.get("address"),
-        "latitude": makina.get("latitude"),
-        "longitude": makina.get("longitude"),
+def bar(level):
+    count = max(0, min(10, int(round(level / 10))))
+    square = "🟩" if level <= 40 else "🟨" if level <= 79 else "🟧" if level <= 89 else "🟥"
+    return square * count + "⬜" * (10 - count)
 
-        "machineStatus": makina.get("machineStatus"),
-        "active": makina.get("active"),
-        "status": makina.get("status"),
 
-        "openingClosingHours": makina.get(
-            "openingClosingHours"
-        ),
+def bin_name(value):
+    return {"pet": "PET", "glass": "CAM", "aluminum": "ALÜMİNYUM", "can": "ALÜMİNYUM"}.get(value, value.upper())
 
-        "lastChecked": datetime.now(
-            TURKIYE_SAATI
-        ).isoformat(),
 
-        "bins": {},
+def filtered_bin(raw, old=None):
+    old = old or {}
+    raw_level = clamp(raw.get("level", 0))
+    samples = list(old.get("samples", []))[-4:] + [raw_level]
+    filtered = int(round(median(samples)))
+    measured_band = band(filtered)
+    confirmed = old.get("confirmedBand")
+    candidate = old.get("candidateBand")
+    candidate_count = int(old.get("candidateCount", 0) or 0)
+    changed = False
+    if confirmed is None:
+        confirmed = measured_band
+        candidate, candidate_count = None, 0
+    elif measured_band == confirmed:
+        candidate, candidate_count = None, 0
+    else:
+        candidate_count = candidate_count + 1 if candidate == measured_band else 1
+        candidate = measured_band
+        if candidate_count >= CONFIRM_COUNT:
+            confirmed, candidate, candidate_count, changed = measured_band, None, 0, True
+    return {
+        "level": raw_level,
+        "state": bool(raw.get("state", False)),
+        "samples": samples,
+        "filteredLevel": filtered,
+        "confirmedBand": confirmed,
+        "candidateBand": candidate,
+        "candidateCount": candidate_count,
+        "_changed": changed,
+        "_previousBand": old.get("confirmedBand"),
+        "_previousLevel": old.get("filteredLevel", old.get("level")),
     }
 
-    for kutu in makina.get("binList", []):
-        kutu_turu = str(
-            kutu.get("contentType", "unknown")
-        ).strip().lower()
 
-        if kutu_turu not in TAKIP_KUTULARI:
-            continue
-
-        durum["bins"][kutu_turu] = {
-            "level": kutu.get("level", 0),
-            "state": bool(
-                kutu.get("state", False)
-            ),
-        }
-
-    return durum
-
-
-def baslik_olustur(yeni_durum):
-    if yeni_durum["type"] == "target":
-        return (
-            "🎯 MUĞLA MERKEZ HEDEFİ\n"
-            f"📌 Bölge: {yeni_durum['label']}"
-        )
-
-    return (
-        f"🚨 ERKEN UYARI — {yeni_durum['label'].upper()}\n"
-        "Muğla merkez için ekip hareketi olabilir."
-    )
-
-
-def kutu_adi_duzenle(kutu_turu):
-    isimler = {
-        "pet": "PET",
-        "glass": "GLASS",
-        "aluminum": "ALUMINUM",
-        "can": "ALUMINUM",
+def build_state(machine, rule, old=None):
+    old = old or {}
+    state = {
+        "name": machine.get("definition", {}).get("name", "Bilinmeyen Makine"),
+        "label": rule["label"], "type": rule["type"],
+        "address": machine.get("address"), "latitude": machine.get("latitude"), "longitude": machine.get("longitude"),
+        "machineStatus": machine.get("machineStatus"), "active": machine.get("active"), "status": machine.get("status"),
+        "openingClosingHours": machine.get("openingClosingHours"),
+        "lastChecked": datetime.now(TZ).isoformat(),
+        "telegramMessageId": old.get("telegramMessageId"), "bins": {},
     }
-
-    return isimler.get(
-        kutu_turu,
-        kutu_turu.upper(),
-    )
-
-
-def ilk_durum_mesaji_olustur(yeni_durum):
-    satirlar = [
-        "♻️ DOA Takip Kaydı",
-        "",
-        baslik_olustur(yeni_durum),
-        "",
-        f"📍 {yeni_durum['name']}",
-        "",
-    ]
-
-    for kutu_turu, kutu in yeni_durum["bins"].items():
-        durum_metni = (
-            "✅ UYGUN"
-            if kutu["state"]
-            else "❌ DOLU"
-        )
-
-        satirlar.append(
-            f"{kutu_adi_duzenle(kutu_turu)}: "
-            f"%{kutu['level']} {durum_metni}"
-        )
-
-    saat = datetime.now(TURKIYE_SAATI).strftime(
-        "%d.%m.%Y %H:%M"
-    )
-
-    satirlar.extend([
-        "",
-        f"🕒 {saat}",
-    ])
-
-    return "\n".join(satirlar)
+    old_bins = old.get("bins", {})
+    for item in machine.get("binList", []):
+        kind = str(item.get("contentType", "unknown")).strip().lower()
+        if kind in TAKIP_KUTULARI:
+            state["bins"][kind] = filtered_bin(item, old_bins.get(kind))
+    return state
 
 
-def degisiklik_mesaji_olustur(eski_durum, yeni_durum):
-    eski_kutular = eski_durum.get("bins", {})
-    yeni_kutular = yeni_durum.get("bins", {})
+def heading(state):
+    return f"🎯 MUĞLA MERKEZ HEDEFİ · {state['label']}" if state["type"] == "target" else f"🚨 ERKEN UYARI · {state['label'].upper()}"
 
-    degisen_kutular = []
-    bildirim_gerekli = False
 
-    for kutu_turu, yeni_kutu in yeni_kutular.items():
-        eski_kutu = eski_kutular.get(kutu_turu)
+def card(state):
+    lines = ["♻️ DOA MAKİNE DURUMU", heading(state), f"📍 {state['name']}", ""]
+    for kind, item in state["bins"].items():
+        level = item["filteredLevel"]
+        lines += [f"{bin_name(kind)} · %{level}", bar(level), band_text(item["confirmedBand"]), ""]
+    lines += [f"🕒 Son kontrol: {datetime.now(TZ).strftime('%d.%m.%Y %H:%M')}", "ℹ️ Son 5 ölçümün medyanı; değişiklik 3 kontrolde doğrulanır."]
+    return "\n".join(lines).strip()
 
-        if eski_kutu is None:
+
+def alert(state):
+    lines = []
+    for kind, item in state["bins"].items():
+        if not item.get("_changed") or item["confirmedBand"] not in {"empty", "nearly_full", "critical"}:
             continue
-
-        eski_state = bool(
-            eski_kutu.get("state", False)
-        )
-        yeni_state = bool(
-            yeni_kutu.get("state", False)
-        )
-
-        # UYGUN / DOLU durumu değişmediyse
-        # bildirim sebebi oluşturmaz.
-        if eski_state == yeni_state:
-            continue
-
-        # Erken uyarı makinelerinde sadece
-        # DOLU -> UYGUN değişimi bildirim oluşturur.
-        if (
-            yeni_durum["type"] == "early_warning"
-            and not yeni_state
-        ):
-            print(
-                "Erken uyarı bildirimi atlandı: "
-                f"{yeni_durum['label']} / "
-                f"{yeni_durum['name']} / "
-                f"{kutu_adi_duzenle(kutu_turu)} "
-                "artık dolu"
-            )
-            continue
-
-        bildirim_gerekli = True
-        degisen_kutular.append(kutu_turu)
-
-    if not bildirim_gerekli:
+        title = "✅ BOŞALTILDIĞI DOĞRULANDI" if item["confirmedBand"] == "empty" else "🚨 KRİTİK SEVİYEYE ULAŞTI" if item["confirmedBand"] == "critical" else "🟠 DOLMAK ÜZERE"
+        lines += [f"{bin_name(kind)}: {title}", f"{band_text(item['_previousBand'])} → {band_text(item['confirmedBand'])}", f"%{item['_previousLevel']} → %{item['filteredLevel']}", ""]
+    if not lines:
         return None
-
-    durum_satirlari = []
-
-    for kutu_turu, yeni_kutu in yeni_kutular.items():
-        kutu_adi = kutu_adi_duzenle(
-            kutu_turu
-        )
-
-        yeni_state = bool(
-            yeni_kutu.get("state", False)
-        )
-        yeni_seviye = yeni_kutu.get(
-            "level",
-            0,
-        )
-
-        eski_kutu = eski_kutular.get(
-            kutu_turu,
-            {},
-        )
-
-        eski_seviye = eski_kutu.get(
-            "level",
-            0,
-        )
-
-        if kutu_turu in degisen_kutular:
-            if yeni_state:
-                durum_metni = "✅ ARTIK UYGUN"
-            else:
-                durum_metni = "❌ ARTIK DOLU"
-
-            durum_satirlari.extend([
-                f"{kutu_adi}: {durum_metni}",
-                f"%{eski_seviye} → %{yeni_seviye}",
-                "",
-            ])
-
-        else:
-            durum_metni = (
-                "✅ UYGUN"
-                if yeni_state
-                else "❌ DOLU"
-            )
-
-            durum_satirlari.append(
-                f"{kutu_adi}: "
-                f"%{yeni_seviye} {durum_metni}"
-            )
-
-    saat = datetime.now(TURKIYE_SAATI).strftime(
-        "%d.%m.%Y %H:%M"
-    )
-
-    satirlar = [
-        "🔔 DOA Durum Güncellemesi",
-        "",
-        baslik_olustur(yeni_durum),
-        "",
-        f"📍 {yeni_durum['name']}",
-        "",
-        *durum_satirlari,
-        "",
-        f"🕒 {saat}",
-    ]
-
-    return "\n".join(satirlar).strip()
+    return "\n".join(["🔔 DOA DOĞRULANMIŞ DEĞİŞİKLİK", heading(state), f"📍 {state['name']}", "", *lines, "Anlık kalibrasyon sıçramaları filtrelendi.", f"🕒 {datetime.now(TZ).strftime('%d.%m.%Y %H:%M')}"]).strip()
 
 
-def makineleri_api_den_al():
-    """
-    SEARCH_POINTS içindeki bütün arama noktalarını sorgular.
-
-    Aynı makine birden fazla bölgede görünürse makine ID'si
-    üzerinden tekilleştirir ve görüldüğü bölgeleri saklar.
-    """
-
-    tum_makineler = {}
-
-    for nokta in SEARCH_POINTS:
-        bolge_adi = nokta["name"]
-        bolge_etiketi = nokta.get(
-            "label",
-            bolge_adi,
-        )
-
-        payload = {
-            "lat": nokta["lat"],
-            "lon": nokta["lon"],
-            "distance": nokta["distance"],
-            "userLat": nokta["userLat"],
-            "userLon": nokta["userLon"],
-        }
-
+def fetch_machines():
+    result = {}
+    for point in SEARCH_POINTS:
+        payload = {key: point[key] for key in ("lat", "lon", "distance", "userLat", "userLon")}
         try:
-            response = requests.post(
-                API_URL,
-                json=payload,
-                timeout=20,
-            )
-
+            response = requests.post(API_URL, json=payload, timeout=20)
             response.raise_for_status()
-            data = response.json()
-
-        except requests.RequestException as hata:
-            print(
-                f"API Hatası "
-                f"({bolge_etiketi}): {hata}"
-            )
+            machines = response.json().get("rvmList", [])
+        except (requests.RequestException, ValueError) as error:
+            print(f"API Hatası ({point.get('label', point['name'])}): {error}")
             continue
-
-        except ValueError:
-            print(
-                "Geçersiz JSON cevabı: "
-                f"{bolge_etiketi}"
-            )
-            continue
-
-        makineler = data.get(
-            "rvmList",
-            [],
-        )
-
-        print(
-            f"{bolge_etiketi} sorgusu: "
-            f"{len(makineler)} makine"
-        )
-
-        for makina in makineler:
-            makina_id = str(
-                makina.get("id", "")
-            ).strip()
-
-            if not makina_id:
-                continue
-
-            if makina_id not in tum_makineler:
-                tum_makineler[makina_id] = {
-                    "data": makina,
-                    "regions": set(),
-                }
-
-            tum_makineler[makina_id]["regions"].add(
-                bolge_adi
-            )
-
-    return tum_makineler
+        for machine in machines:
+            machine_id = str(machine.get("id", "")).strip()
+            if machine_id:
+                result.setdefault(machine_id, {"data": machine, "regions": set()})["regions"].add(point["name"])
+    return result
 
 
 def siteyi_test_et():
-    tum_makineler = makineleri_api_den_al()
-
-    print(
-        "Tekilleştirilmiş toplam makine: "
-        f"{len(tum_makineler)}"
-    )
-
-    eski_durumlar = durumlari_yukle()
-    yeni_durumlar = {}
-
-    takip_edilen_sayi = 0
-
-    for makina_id, makina_bilgisi in tum_makineler.items():
-        makina = makina_bilgisi["data"]
-        bulundugu_bolgeler = makina_bilgisi["regions"]
-
-        makina_ismi = makina.get(
-            "definition",
-            {},
-        ).get(
-            "name",
-            "Bilinmeyen Makine",
-        )
-
-        siniflandirma = makina_siniflandir(
-            makina_ismi,
-            bulundugu_bolgeler,
-        )
-
-        if siniflandirma is None:
+    old_states, new_states = durumlari_yukle(), {}
+    for machine_id, info in fetch_machines().items():
+        machine = info["data"]
+        name = machine.get("definition", {}).get("name", "Bilinmeyen Makine")
+        rule = classify(name, info["regions"])
+        if not rule:
             continue
-
-        takip_edilen_sayi += 1
-
-        yeni_durum = makina_durumu_olustur(
-            makina,
-            siniflandirma,
-        )
-
-        yeni_durumlar[makina_id] = yeni_durum
-
-        gecmis_kaydi_ekle(
-            makina_id,
-             yeni_durum,
-        )
-
-        eski_durum = eski_durumlar.get(
-             makina_id
-         )
-        if eski_durum is None:
-            mesaj = ilk_durum_mesaji_olustur(
-                yeni_durum
-            )
-
-            telegram_gonder(mesaj)
-
-            print(
-                "İlk durum kaydedildi: "
-                f"{siniflandirma['label']} / "
-                f"{makina_ismi}"
-            )
-            continue
-
-        mesaj = degisiklik_mesaji_olustur(
-            eski_durum,
-            yeni_durum,
-        )
-
-        if mesaj:
-            telegram_gonder(mesaj)
-
-            print(
-                "Durum değişikliği gönderildi: "
-                f"{siniflandirma['label']} / "
-                f"{makina_ismi}"
-            )
-        else:
-            print(
-                "Bildirim gerektiren değişiklik yok: "
-                f"{siniflandirma['label']} / "
-                f"{makina_ismi}"
-            )
-
-    if takip_edilen_sayi == 0:
-        print(
-            "Takip edilecek makine bulunamadı."
-        )
+        state = build_state(machine, rule, old_states.get(machine_id))
+        message_id = state.get("telegramMessageId")
+        if not message_id or not telegram_duzenle(message_id, card(state)):
+            new_id = telegram_gonder(card(state))
+            if new_id:
+                state["telegramMessageId"] = new_id
+        warning = alert(state)
+        if warning:
+            telegram_gonder(warning)
+        gecmis_kaydi_ekle(machine_id, state)
+        for item in state["bins"].values():
+            item.pop("_changed", None); item.pop("_previousBand", None); item.pop("_previousLevel", None)
+        new_states[machine_id] = state
+        print(f"Durum kartı güncellendi: {rule['label']} / {name}")
+    if not new_states:
+        print("Takip edilecek makine bulunamadı.")
         return
-
-    # API'de geçici olarak görünmeyen eski makineleri
-    # silmeden korur.
-    eski_durumlar.update(
-        yeni_durumlar
-    )
-
-    durumlari_kaydet(
-        eski_durumlar
-    )
-
-    print(
-        "Takip edilen makine sayısı: "
-        f"{takip_edilen_sayi}"
-    )
-    print("status.json güncellendi.")
+    old_states.update(new_states)
+    durumlari_kaydet(old_states)
+    print(f"Takip edilen makine sayısı: {len(new_states)}")
