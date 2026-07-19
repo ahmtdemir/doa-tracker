@@ -51,7 +51,7 @@
     },
     "cardVersion": 2,
     "label": "Ula",
-    "lastChecked": "2026-07-19T23:36:01.488985+03:00",
+    "lastChecked": "2026-07-19T23:40:59.947936+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -113,7 +113,7 @@
     },
     "cardVersion": 2,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T23:36:00.739709+03:00",
+    "lastChecked": "2026-07-19T23:40:59.276235+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -175,7 +175,7 @@
     },
     "cardVersion": 2,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T23:36:00.407925+03:00",
+    "lastChecked": "2026-07-19T23:40:58.955199+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -229,7 +229,7 @@
           100,
           100,
           100,
-          100,
+          99,
           99
         ],
         "state": false
@@ -237,7 +237,7 @@
     },
     "cardVersion": 2,
     "label": "Milas",
-    "lastChecked": "2026-07-19T23:36:00.074139+03:00",
+    "lastChecked": "2026-07-19T23:40:58.643337+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -286,20 +286,20 @@
         "candidateCount": 0,
         "confirmedBand": "critical",
         "filteredLevel": 100,
-        "level": 99,
+        "level": 100,
         "samples": [
           100,
           100,
-          100,
           99,
-          99
+          99,
+          100
         ],
         "state": false
       }
     },
     "cardVersion": 2,
     "label": "Ula",
-    "lastChecked": "2026-07-19T23:36:01.101308+03:00",
+    "lastChecked": "2026-07-19T23:40:59.621652+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -317,14 +317,14 @@
         "candidateBand": null,
         "candidateCount": 0,
         "confirmedBand": "filling",
-        "filteredLevel": 46,
-        "level": 45,
+        "filteredLevel": 51,
+        "level": 51,
         "samples": [
-          46,
           53,
           53,
           45,
-          45
+          45,
+          51
         ],
         "state": true
       },
@@ -361,7 +361,7 @@
     },
     "cardVersion": 2,
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T23:36:01.801887+03:00",
+    "lastChecked": "2026-07-19T23:41:00.302880+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
