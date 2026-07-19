@@ -4,20 +4,20 @@
     "address": "KÖPRÜBAŞI MAH KAVACIK CADDE No:12A/0 MUĞLA/ULA",
     "bins": {
       "aluminum": {
-        "level": 42,
-        "state": true
+        "level": 94,
+        "state": false
       },
       "glass": {
-        "level": 97,
-        "state": false
+        "level": 64,
+        "state": true
       },
       "pet": {
-        "level": 93,
-        "state": false
+        "level": 17,
+        "state": true
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T12:22:44.636901+03:00",
+    "lastChecked": "2026-07-19T13:51:00.315381+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T12:22:44.636784+03:00",
+    "lastChecked": "2026-07-19T13:51:00.315254+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T12:22:44.636715+03:00",
+    "lastChecked": "2026-07-19T13:51:00.315012+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -85,20 +85,20 @@
     "address": "AYDINLIKEVLER MAH Pazaryeri Sok. No:3\tA/1 MUĞLA/MİLAS",
     "bins": {
       "aluminum": {
-        "level": 99,
-        "state": false
+        "level": 20,
+        "state": true
       },
       "glass": {
         "level": 97,
         "state": false
       },
       "pet": {
-        "level": 81,
+        "level": 39,
         "state": true
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T12:22:44.636577+03:00",
+    "lastChecked": "2026-07-19T13:50:59.818442+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -125,13 +125,13 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T12:22:44.636845+03:00",
+    "lastChecked": "2026-07-19T13:51:00.315323+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
-    "machineStatus": 2,
+    "machineStatus": 0,
     "name": "BİM-ULA",
-    "openingClosingHours": null,
-    "status": 4,
+    "openingClosingHours": "21:00 'da kapanıyor",
+    "status": 1,
     "type": "early_warning"
   },
   "ff68d07b-7e2d-4c2a-a61d-ba63a61c410f": {
@@ -139,20 +139,20 @@
     "address": "CUMHURİYET MAH 166 SOK. No:6/1 MUĞLA/YATAĞAN",
     "bins": {
       "aluminum": {
-        "level": 47,
+        "level": 16,
         "state": true
       },
       "glass": {
-        "level": 0,
+        "level": 34,
         "state": true
       },
       "pet": {
-        "level": 74,
+        "level": 83,
         "state": true
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T12:22:44.636965+03:00",
+    "lastChecked": "2026-07-19T13:51:00.789805+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
