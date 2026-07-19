@@ -4,7 +4,7 @@
     "address": "KÖPRÜBAŞI MAH KAVACIK CADDE No:12A/0 MUĞLA/ULA",
     "bins": {
       "aluminum": {
-        "level": 61,
+        "level": 42,
         "state": true
       },
       "glass": {
@@ -17,13 +17,13 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T10:16:14.907316+03:00",
+    "lastChecked": "2026-07-19T12:21:11.582870+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
-    "machineStatus": 2,
+    "machineStatus": 0,
     "name": "A101 I821 KÖPRÜBAŞI",
-    "openingClosingHours": null,
-    "status": 4,
+    "openingClosingHours": "21:00 'da kapanıyor",
+    "status": 1,
     "type": "early_warning"
   },
   "5f128577-b5a5-4642-93b6-f94d5833b10b": {
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T10:16:14.907200+03:00",
+    "lastChecked": "2026-07-19T12:21:11.582709+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T10:16:14.907119+03:00",
+    "lastChecked": "2026-07-19T12:21:11.582392+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -85,20 +85,20 @@
     "address": "AYDINLIKEVLER MAH Pazaryeri Sok. No:3\tA/1 MUĞLA/MİLAS",
     "bins": {
       "aluminum": {
-        "level": 86,
-        "state": true
+        "level": 99,
+        "state": false
       },
       "glass": {
         "level": 97,
         "state": false
       },
       "pet": {
-        "level": 96,
-        "state": false
+        "level": 81,
+        "state": true
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T10:16:14.906983+03:00",
+    "lastChecked": "2026-07-19T12:21:10.947155+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -125,7 +125,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T10:16:14.907261+03:00",
+    "lastChecked": "2026-07-19T12:21:11.582787+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 2,
@@ -139,20 +139,20 @@
     "address": "CUMHURİYET MAH 166 SOK. No:6/1 MUĞLA/YATAĞAN",
     "bins": {
       "aluminum": {
-        "level": 49,
+        "level": 47,
         "state": true
       },
       "glass": {
-        "level": 65,
+        "level": 0,
         "state": true
       },
       "pet": {
-        "level": 98,
-        "state": false
+        "level": 74,
+        "state": true
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T10:16:14.907373+03:00",
+    "lastChecked": "2026-07-19T12:21:11.582939+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
