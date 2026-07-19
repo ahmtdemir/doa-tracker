@@ -17,7 +17,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T22:11:02.651866+03:00",
+    "lastChecked": "2026-07-19T22:15:59.061161+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T22:11:02.651731+03:00",
+    "lastChecked": "2026-07-19T22:15:59.061069+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T22:11:02.651656+03:00",
+    "lastChecked": "2026-07-19T22:15:59.061009+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -98,7 +98,7 @@
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T22:11:02.651532+03:00",
+    "lastChecked": "2026-07-19T22:15:59.060887+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -125,7 +125,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T22:11:02.651801+03:00",
+    "lastChecked": "2026-07-19T22:15:59.061120+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -139,7 +139,7 @@
     "address": "CUMHURİYET MAH 166 SOK. No:6/1 MUĞLA/YATAĞAN",
     "bins": {
       "aluminum": {
-        "level": 52,
+        "level": 51,
         "state": true
       },
       "glass": {
@@ -152,7 +152,7 @@
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T22:11:02.651941+03:00",
+    "lastChecked": "2026-07-19T22:15:59.061203+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
