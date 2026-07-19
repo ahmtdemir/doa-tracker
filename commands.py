@@ -1,11 +1,14 @@
+import json
 import re
 from datetime import datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from status_manager import durumlari_yukle
 from telegram import telegram_gonder, telegram_komutlarini_al
 
 TZ = ZoneInfo("Europe/Istanbul")
+WORKFLOW_HISTORY = Path("workflow_runs.jsonl")
 
 
 def normalize(text):
@@ -76,6 +79,8 @@ def resolve_region(command):
         return "all"
     if value in {"oncelik", "rota", "bugun", "operasyon"}:
         return "priority"
+    if value in {"tetikleme", "kaynak", "calisma", "workflow", "debug"}:
+        return "trigger"
     if "mugla merkez" in value or value in {"mugla", "merkez", "mentese"}:
         return "Muğla Merkez"
     if "ula" in value:
@@ -97,9 +102,67 @@ def help_text():
         "Milas — Milas makinesinin son durumu",
         "Durum — takip edilen bütün makineler",
         "Öncelik — önce gidilmesi gereken makineler",
+        "Tetikleme — son çalışma kaynakları",
         "",
         "Komutları / işareti olmadan da yazabilirsin.",
     ])
+
+
+def trigger_source_label(source):
+    return {
+        "cloudflare": "☁️ Cloudflare",
+        "github_schedule": "🕒 GitHub zamanlayıcısı",
+        "manual": "👤 Manuel",
+    }.get(str(source or "").strip().lower(), f"❔ {source or 'Bilinmiyor'}")
+
+
+def trigger_report():
+    if not WORKFLOW_HISTORY.exists():
+        return "ℹ️ Henüz çalışma geçmişi bulunamadı."
+
+    records = []
+    for raw_line in WORKFLOW_HISTORY.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        try:
+            records.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue
+
+    if not records:
+        return "ℹ️ Okunabilir çalışma kaydı bulunamadı."
+
+    recent = records[-5:]
+    lines = ["🔎 SON TETİKLEMELER", ""]
+    for record in reversed(recent):
+        source = trigger_source_label(record.get("triggerSource"))
+        started = record.get("startedAtTurkey") or record.get("startedAtUtc")
+        try:
+            moment = datetime.fromisoformat(started).astimezone(TZ)
+            time_text = moment.strftime("%d.%m %H:%M:%S")
+        except (TypeError, ValueError):
+            time_text = str(started or "Bilinmiyor")
+        lines.append(f"#{record.get('runNumber', '?')} · {time_text} · {source}")
+
+    if len(records) >= 2:
+        latest = records[-1]
+        previous = records[-2]
+        try:
+            latest_dt = datetime.fromisoformat(latest.get("startedAtUtc"))
+            previous_dt = datetime.fromisoformat(previous.get("startedAtUtc"))
+            gap_seconds = abs((latest_dt - previous_dt).total_seconds())
+        except (TypeError, ValueError):
+            gap_seconds = None
+
+        same_source = latest.get("triggerSource") == previous.get("triggerSource")
+        if gap_seconds is not None and same_source and gap_seconds < 120:
+            lines.extend([
+                "",
+                f"⚠️ Aynı kaynaktan {round(gap_seconds)} saniye arayla iki çalışma görülmüş.",
+            ])
+
+    return "\n".join(lines)
 
 
 def selected_states(states, region):
@@ -142,7 +205,9 @@ def telegram_komutlarini_isle():
         region = resolve_region(command["text"])
         if region == "help":
             telegram_gonder(help_text(), command["chat_id"])
+        elif region == "trigger":
+            telegram_gonder(trigger_report(), command["chat_id"])
         elif region:
             send_region(states, region, command["chat_id"])
         else:
-            telegram_gonder("Komutu anlayamadım. Muğla Merkez, Ula, Yatağan, Milas, Durum veya Öncelik yazabilirsin.", command["chat_id"])
+            telegram_gonder("Komutu anlayamadım. Muğla Merkez, Ula, Yatağan, Milas, Durum, Öncelik veya Tetikleme yazabilirsin.", command["chat_id"])
