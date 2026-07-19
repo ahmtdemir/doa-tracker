@@ -51,7 +51,7 @@
     },
     "cardVersion": 2,
     "label": "Ula",
-    "lastChecked": "2026-07-19T23:30:58.931074+03:00",
+    "lastChecked": "2026-07-19T23:36:01.488985+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -113,7 +113,7 @@
     },
     "cardVersion": 2,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T23:30:58.261589+03:00",
+    "lastChecked": "2026-07-19T23:36:00.739709+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -175,7 +175,7 @@
     },
     "cardVersion": 2,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T23:30:57.940213+03:00",
+    "lastChecked": "2026-07-19T23:36:00.407925+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -224,20 +224,20 @@
         "candidateCount": 0,
         "confirmedBand": "critical",
         "filteredLevel": 100,
-        "level": 100,
+        "level": 99,
         "samples": [
           100,
           100,
           100,
           100,
-          100
+          99
         ],
         "state": false
       }
     },
     "cardVersion": 2,
     "label": "Milas",
-    "lastChecked": "2026-07-19T23:30:57.539110+03:00",
+    "lastChecked": "2026-07-19T23:36:00.074139+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -291,7 +291,7 @@
           100,
           100,
           100,
-          100,
+          99,
           99
         ],
         "state": false
@@ -299,13 +299,13 @@
     },
     "cardVersion": 2,
     "label": "Ula",
-    "lastChecked": "2026-07-19T23:30:58.599112+03:00",
+    "lastChecked": "2026-07-19T23:36:01.101308+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
-    "machineStatus": 2,
+    "machineStatus": 0,
     "name": "BİM-ULA",
-    "openingClosingHours": null,
-    "status": 4,
+    "openingClosingHours": "09:00 'da açılıyor",
+    "status": 2,
     "telegramMessageId": 62,
     "type": "early_warning"
   },
@@ -321,9 +321,9 @@
         "level": 45,
         "samples": [
           46,
-          46,
           53,
           53,
+          45,
           45
         ],
         "state": true
@@ -361,7 +361,7 @@
     },
     "cardVersion": 2,
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T23:30:59.270956+03:00",
+    "lastChecked": "2026-07-19T23:36:01.801887+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
