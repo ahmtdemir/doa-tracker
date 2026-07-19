@@ -4,7 +4,7 @@
     "address": "KÖPRÜBAŞI MAH KAVACIK CADDE No:12A/0 MUĞLA/ULA",
     "bins": {
       "aluminum": {
-        "level": 41,
+        "level": 42,
         "state": true
       },
       "glass": {
@@ -17,7 +17,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T07:35:01.274701+03:00",
+    "lastChecked": "2026-07-19T07:38:14.481841+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T07:35:01.274258+03:00",
+    "lastChecked": "2026-07-19T07:38:14.481405+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -62,8 +62,8 @@
         "state": false
       },
       "glass": {
-        "level": 22,
-        "state": true
+        "level": 97,
+        "state": false
       },
       "pet": {
         "level": 91,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T07:35:00.729512+03:00",
+    "lastChecked": "2026-07-19T07:38:13.980365+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -98,7 +98,7 @@
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T07:35:00.729364+03:00",
+    "lastChecked": "2026-07-19T07:38:13.980247+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -125,7 +125,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T07:35:01.274622+03:00",
+    "lastChecked": "2026-07-19T07:38:14.481760+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -152,7 +152,7 @@
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T07:35:01.274781+03:00",
+    "lastChecked": "2026-07-19T07:38:14.481909+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
