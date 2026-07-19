@@ -16,16 +16,17 @@ def _hazir_mi():
     return True
 
 
-def telegram_gonder(mesaj):
+def telegram_gonder(mesaj, chat_id=None):
     """Mesajı gönderir; başarılıysa Telegram message_id döndürür."""
     if not _hazir_mi():
         return None
 
+    hedef_chat = str(chat_id or CHAT_ID)
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     try:
         response = requests.post(
             url,
-            json={"chat_id": CHAT_ID, "text": mesaj},
+            json={"chat_id": hedef_chat, "text": mesaj},
             timeout=15,
         )
         if response.status_code == 200:
@@ -64,3 +65,47 @@ def telegram_duzenle(mesaj_id, mesaj):
     except (requests.RequestException, TypeError, ValueError) as hata:
         print("Telegram düzenleme bağlantı hatası:", hata)
     return False
+
+
+def telegram_komutlarini_al(limit=20):
+    """Bekleyen metin komutlarını alır ve tekrar işlenmemeleri için onaylar."""
+    if not _hazir_mi():
+        return []
+
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/getUpdates"
+    try:
+        response = requests.get(
+            url,
+            params={"offset": -abs(int(limit)), "limit": limit, "timeout": 0},
+            timeout=15,
+        )
+        response.raise_for_status()
+        updates = response.json().get("result", [])
+    except (requests.RequestException, ValueError, TypeError) as hata:
+        print("Telegram komut okuma hatası:", hata)
+        return []
+
+    if updates:
+        son_update_id = max(int(item.get("update_id", 0)) for item in updates)
+        try:
+            requests.get(
+                url,
+                params={"offset": son_update_id + 1, "limit": 1, "timeout": 0},
+                timeout=15,
+            )
+        except requests.RequestException as hata:
+            print("Telegram komut onaylama hatası:", hata)
+
+    komutlar = []
+    for update in updates:
+        message = update.get("message") or update.get("edited_message") or {}
+        text = str(message.get("text") or "").strip()
+        chat_id = str((message.get("chat") or {}).get("id") or "")
+        if not text or not chat_id:
+            continue
+        if str(CHAT_ID) != chat_id:
+            print(f"Yetkisiz Telegram komutu yok sayıldı: {chat_id}")
+            continue
+        komutlar.append({"text": text, "chat_id": chat_id})
+
+    return komutlar
