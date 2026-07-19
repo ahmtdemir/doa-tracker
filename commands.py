@@ -20,18 +20,6 @@ def level_of(item):
     return int(item.get("filteredLevel", item.get("level", 0)) or 0)
 
 
-def band_text(level):
-    if level <= 20:
-        return "✅ BOŞALTILMIŞ / ÇOK UYGUN"
-    if level <= 40:
-        return "✅ UYGUN"
-    if level <= 79:
-        return "🟡 DOLUYOR"
-    if level <= 89:
-        return "🟠 DOLMAK ÜZERE"
-    return "🚨 KRİTİK / DOLUM SINIRINDA"
-
-
 def bar(level):
     count = max(0, min(10, int(round(level / 10))))
     if level <= 40:
@@ -54,14 +42,18 @@ def bin_name(kind):
     }.get(kind, str(kind).upper())
 
 
+def suitability_text(item):
+    return "✅ UYGUN" if item.get("state") else "❌ UYGUN DEĞİL"
+
+
 def machine_card(state):
     lines = [f"📍 {state.get('name', 'Bilinmeyen Makine')}", ""]
     for kind, item in (state.get("bins") or {}).items():
         level = level_of(item)
         lines.extend([
-            f"{bin_name(kind)} · %{level}",
+            bin_name(kind),
             bar(level),
-            band_text(level),
+            f"%{level} · {suitability_text(item)}",
             "",
         ])
     checked = state.get("lastChecked")
