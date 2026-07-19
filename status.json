@@ -4,20 +4,20 @@
     "address": "KÖPRÜBAŞI MAH KAVACIK CADDE No:12A/0 MUĞLA/ULA",
     "bins": {
       "aluminum": {
-        "level": 94,
+        "level": 90,
         "state": false
       },
       "glass": {
-        "level": 64,
-        "state": true
+        "level": 97,
+        "state": false
       },
       "pet": {
-        "level": 17,
-        "state": true
+        "level": 92,
+        "state": false
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T13:52:47.898367+03:00",
+    "lastChecked": "2026-07-19T19:30:39.208153+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T13:52:47.898234+03:00",
+    "lastChecked": "2026-07-19T19:30:39.207975+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T13:52:47.898151+03:00",
+    "lastChecked": "2026-07-19T19:30:39.207881+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -85,7 +85,7 @@
     "address": "AYDINLIKEVLER MAH Pazaryeri Sok. No:3\tA/1 MUĞLA/MİLAS",
     "bins": {
       "aluminum": {
-        "level": 20,
+        "level": 73,
         "state": true
       },
       "glass": {
@@ -93,12 +93,12 @@
         "state": false
       },
       "pet": {
-        "level": 39,
-        "state": true
+        "level": 92,
+        "state": false
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T13:52:47.898013+03:00",
+    "lastChecked": "2026-07-19T19:30:39.207746+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -120,12 +120,12 @@
         "state": false
       },
       "pet": {
-        "level": 100,
+        "level": 99,
         "state": false
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T13:52:47.898303+03:00",
+    "lastChecked": "2026-07-19T19:30:39.208054+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -139,20 +139,20 @@
     "address": "CUMHURİYET MAH 166 SOK. No:6/1 MUĞLA/YATAĞAN",
     "bins": {
       "aluminum": {
-        "level": 16,
+        "level": 50,
         "state": true
       },
       "glass": {
-        "level": 34,
-        "state": true
+        "level": 97,
+        "state": false
       },
       "pet": {
-        "level": 83,
+        "level": 57,
         "state": true
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T13:52:47.898433+03:00",
+    "lastChecked": "2026-07-19T19:30:39.208235+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
