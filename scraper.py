@@ -17,8 +17,9 @@ from telegram import telegram_duzenle, telegram_gonder
 
 TZ = ZoneInfo("Europe/Istanbul")
 SAMPLE_COUNT = 5
+NOISE_HISTORY_COUNT = 48
 CONFIRM_COUNT = 3
-CARD_VERSION = 2
+CARD_VERSION = 3
 
 
 def norm(value):
@@ -61,16 +62,6 @@ def band(level):
     return "critical"
 
 
-def band_text(value):
-    return {
-        "empty": "✅ BOŞALTILMIŞ / ÇOK UYGUN",
-        "available": "✅ UYGUN",
-        "filling": "🟡 DOLUYOR",
-        "nearly_full": "🟠 DOLMAK ÜZERE",
-        "critical": "🚨 KRİTİK / DOLUM SINIRINDA",
-    }.get(value, "BİLİNMİYOR")
-
-
 def bar(level):
     count = max(0, min(10, int(round(level / 10))))
     if level <= 40:
@@ -93,13 +84,43 @@ def bin_name(value):
     }.get(value, value.upper())
 
 
+def is_night():
+    hour = datetime.now(TZ).hour
+    return hour >= 22 or hour < 8
+
+
+def learned_tolerance(old, raw_level):
+    """Makinenin küçük sensör oynamalarından kendine uygun tolerans öğrenir."""
+    previous_raw = old.get("level")
+    noise_samples = list(old.get("noiseSamples", []))[-(NOISE_HISTORY_COUNT - 1):]
+
+    if previous_raw is not None:
+        delta = abs(raw_level - clamp(previous_raw))
+        if delta <= 14:
+            noise_samples.append(delta)
+
+    base = 8 if is_night() else 5
+    learned = int(round(median(noise_samples))) + 2 if noise_samples else base
+    tolerance = max(base, min(12, learned))
+    return tolerance, noise_samples
+
+
 def filtered_bin(raw, old=None):
     old = old or {}
     raw_level = clamp(raw.get("level", 0))
     samples = list(old.get("samples", []))[-(SAMPLE_COUNT - 1):] + [raw_level]
-    filtered = int(round(median(samples)))
-    measured_band = band(filtered)
+    measured_level = int(round(median(samples)))
 
+    tolerance, noise_samples = learned_tolerance(old, raw_level)
+    previous_display = old.get("filteredLevel")
+    if previous_display is None:
+        filtered = measured_level
+    elif abs(measured_level - clamp(previous_display)) <= tolerance:
+        filtered = clamp(previous_display)
+    else:
+        filtered = measured_level
+
+    measured_band = band(filtered)
     confirmed = old.get("confirmedBand")
     candidate = old.get("candidateBand")
     candidate_count = int(old.get("candidateCount", 0) or 0)
@@ -125,6 +146,8 @@ def filtered_bin(raw, old=None):
         "level": raw_level,
         "state": bool(raw.get("state", False)),
         "samples": samples,
+        "noiseSamples": noise_samples,
+        "displayTolerance": tolerance,
         "filteredLevel": filtered,
         "confirmedBand": confirmed,
         "candidateBand": candidate,
@@ -145,7 +168,7 @@ def apply_simultaneous_emptying(state, old):
         previous_level = clamp(previous.get("filteredLevel", previous.get("level", 0)))
         raw_level = item["level"]
 
-        if previous_level >= 80 and raw_level <= 20 and previous_level - raw_level >= 50:
+        if previous_level >= 80 and raw_level <= 20 and previous_level - raw_level >= 60:
             emptied.append(kind)
 
     if len(emptied) < 2:
@@ -201,6 +224,10 @@ def heading(state):
     return f"🚨 ERKEN UYARI · {state['label'].upper()}"
 
 
+def suitability_text(item):
+    return "✅ UYGUN" if item.get("state") else "❌ UYGUN DEĞİL"
+
+
 def card(state):
     lines = [
         "♻️ DOA MAKİNE DURUMU",
@@ -212,9 +239,9 @@ def card(state):
     for kind, item in state["bins"].items():
         level = item["filteredLevel"]
         lines.extend([
-            f"{bin_name(kind)} · %{level}",
+            bin_name(kind),
             bar(level),
-            band_text(item["confirmedBand"]),
+            f"%{level} · {suitability_text(item)}",
             "",
         ])
 
@@ -233,10 +260,10 @@ def alert(state):
 
         if item["confirmedBand"] == "empty":
             title = "✅ BOŞALTILDI"
-        elif item["confirmedBand"] == "critical":
-            title = "🚨 KRİTİK SEVİYEYE ULAŞTI"
+        elif item.get("state"):
+            title = "🟠 DOLULUK YÜKSELDİ — HÂLÂ UYGUN"
         else:
-            title = "🟠 DOLMAK ÜZERE"
+            title = "❌ UYGUN DEĞİL"
 
         lines.extend([
             f"{bin_name(kind)}: {title}",
@@ -247,11 +274,7 @@ def alert(state):
     if not lines:
         return None
 
-    if state.get("simultaneousEmptying"):
-        event_title = "✅ MAKİNE BOŞALTILDI"
-    else:
-        event_title = "🔔 DOA DURUM DEĞİŞİKLİĞİ"
-
+    event_title = "✅ MAKİNE BOŞALTILDI" if state.get("simultaneousEmptying") else "🔔 DOA DURUM DEĞİŞİKLİĞİ"
     return "\n".join([
         event_title,
         heading(state),
@@ -304,7 +327,6 @@ def siteyi_test_et():
         old_state = old_states.get(machine_id, {})
         state = build_state(machine, rule, old_state)
 
-        # Yeni kart tasarımını bir kez yeniden gönder; sonraki çalışmalarda aynı mesajı düzenle.
         message_id = state.get("telegramMessageId")
         needs_new_card = old_state.get("cardVersion") != CARD_VERSION
 
