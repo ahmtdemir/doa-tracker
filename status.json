@@ -11,6 +11,7 @@
         "filteredLevel": 94,
         "level": 94,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -30,6 +31,7 @@
         "filteredLevel": 97,
         "level": 97,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -49,6 +51,7 @@
         "filteredLevel": 92,
         "level": 92,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -63,7 +66,7 @@
     },
     "cardVersion": 3,
     "label": "Ula",
-    "lastChecked": "2026-07-20T00:01:00.823829+03:00",
+    "lastChecked": "2026-07-20T00:06:00.246848+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -85,6 +88,7 @@
         "filteredLevel": 93,
         "level": 93,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -104,6 +108,7 @@
         "filteredLevel": 97,
         "level": 97,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -123,6 +128,7 @@
         "filteredLevel": 97,
         "level": 97,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -137,13 +143,13 @@
     },
     "cardVersion": 3,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-20T00:01:00.105660+03:00",
+    "lastChecked": "2026-07-20T00:05:58.913019+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
-    "machineStatus": 0,
+    "machineStatus": 2,
     "name": "MİGROS MUĞLA MM MİGROS",
-    "openingClosingHours": "08:30 'da açılıyor",
-    "status": 2,
+    "openingClosingHours": null,
+    "status": 4,
     "telegramMessageId": 70,
     "type": "target"
   },
@@ -159,6 +165,7 @@
         "filteredLevel": 92,
         "level": 92,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -178,6 +185,7 @@
         "filteredLevel": 97,
         "level": 97,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -197,6 +205,7 @@
         "filteredLevel": 91,
         "level": 91,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -211,7 +220,7 @@
     },
     "cardVersion": 3,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-20T00:00:59.748591+03:00",
+    "lastChecked": "2026-07-20T00:05:58.423075+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -233,6 +242,7 @@
         "filteredLevel": 82,
         "level": 82,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -252,6 +262,7 @@
         "filteredLevel": 97,
         "level": 97,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -271,6 +282,7 @@
         "filteredLevel": 99,
         "level": 99,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -285,7 +297,7 @@
     },
     "cardVersion": 3,
     "label": "Milas",
-    "lastChecked": "2026-07-20T00:00:59.321398+03:00",
+    "lastChecked": "2026-07-20T00:05:57.849830+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
@@ -307,6 +319,7 @@
         "filteredLevel": 91,
         "level": 91,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -326,6 +339,7 @@
         "filteredLevel": 97,
         "level": 97,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -343,23 +357,24 @@
         "confirmedBand": "critical",
         "displayTolerance": 8,
         "filteredLevel": 99,
-        "level": 100,
+        "level": 99,
         "noiseSamples": [
+          1,
           1
         ],
         "samples": [
+          99,
+          99,
+          99,
           100,
-          99,
-          99,
-          99,
-          100
+          99
         ],
         "state": false
       }
     },
     "cardVersion": 3,
     "label": "Ula",
-    "lastChecked": "2026-07-20T00:01:00.503346+03:00",
+    "lastChecked": "2026-07-20T00:05:59.868128+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -379,16 +394,17 @@
         "confirmedBand": "filling",
         "displayTolerance": 8,
         "filteredLevel": 51,
-        "level": 52,
+        "level": 53,
         "noiseSamples": [
+          1,
           1
         ],
         "samples": [
-          51,
           52,
           51,
           51,
-          52
+          52,
+          53
         ],
         "state": true
       },
@@ -400,6 +416,7 @@
         "filteredLevel": 97,
         "level": 97,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -419,6 +436,7 @@
         "filteredLevel": 98,
         "level": 98,
         "noiseSamples": [
+          0,
           0
         ],
         "samples": [
@@ -433,7 +451,7 @@
     },
     "cardVersion": 3,
     "label": "Yatağan",
-    "lastChecked": "2026-07-20T00:01:01.163910+03:00",
+    "lastChecked": "2026-07-20T00:06:00.637502+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
