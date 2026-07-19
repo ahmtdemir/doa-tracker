@@ -17,7 +17,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T22:20:59.275809+03:00",
+    "lastChecked": "2026-07-19T22:26:02.527006+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
@@ -44,7 +44,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T22:20:59.275649+03:00",
+    "lastChecked": "2026-07-19T22:26:02.526864+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
     "machineStatus": 0,
@@ -71,7 +71,7 @@
       }
     },
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-19T22:20:59.275575+03:00",
+    "lastChecked": "2026-07-19T22:26:02.526774+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
@@ -98,13 +98,13 @@
       }
     },
     "label": "Milas",
-    "lastChecked": "2026-07-19T22:20:59.275459+03:00",
+    "lastChecked": "2026-07-19T22:26:02.526630+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
-    "machineStatus": 0,
+    "machineStatus": 2,
     "name": "BİM-AYDINLIKEVLER",
-    "openingClosingHours": "09:00 'da açılıyor",
-    "status": 2,
+    "openingClosingHours": null,
+    "status": 4,
     "type": "early_warning"
   },
   "fb151f25-cad7-40f5-bffd-ba8c597e6ab5": {
@@ -125,7 +125,7 @@
       }
     },
     "label": "Ula",
-    "lastChecked": "2026-07-19T22:20:59.275718+03:00",
+    "lastChecked": "2026-07-19T22:26:02.526939+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
@@ -152,7 +152,7 @@
       }
     },
     "label": "Yatağan",
-    "lastChecked": "2026-07-19T22:20:59.275881+03:00",
+    "lastChecked": "2026-07-19T22:26:02.527075+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
