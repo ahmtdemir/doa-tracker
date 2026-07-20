@@ -1,10 +1,15 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+import alert_formatter
 import commands
 import scraper
-from alarm_level_fix import use_previous_raw_level
-from alert_formatter import alert, card, command_card, safe_apply_simultaneous_emptying, safe_confirm_boolean
+from alarm_level_fix import (
+    change_title_with_alarm_memory,
+    confirm_boolean_two_way,
+    use_alarm_memory,
+)
+from alert_formatter import alert, card, command_card, safe_apply_simultaneous_emptying
 
 TZ = ZoneInfo("Europe/Istanbul")
 OPEN_HOUR = 8
@@ -20,10 +25,11 @@ def guarded_alert(state):
     return alert(state)
 
 
+alert_formatter.change_title = change_title_with_alarm_memory
 scraper.card = card
 scraper.alert = guarded_alert
-scraper.confirm_boolean = safe_confirm_boolean
-scraper.filtered_bin = use_previous_raw_level(scraper.filtered_bin)
+scraper.confirm_boolean = confirm_boolean_two_way
+scraper.filtered_bin = use_alarm_memory(scraper.filtered_bin)
 scraper.apply_simultaneous_emptying = safe_apply_simultaneous_emptying
 commands.machine_card = command_card
 
