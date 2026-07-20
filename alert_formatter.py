@@ -1,6 +1,5 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from urllib.parse import quote
 
 TZ = ZoneInfo("Europe/Istanbul")
 RETURN_CONFIRM_COUNT = 3
@@ -24,25 +23,21 @@ def bin_label(kind):
     return {"pet": "PET", "glass": "CAM", "aluminum": "ALÜMİNYUM", "can": "ALÜMİNYUM"}.get(kind, str(kind).upper())
 
 
-def suitability_text(item):
-    return "✅ UYGUN" if bool(item.get("confirmedState", False)) else "❌ UYGUN DEĞİL"
+def doa_suitability_text(item):
+    """DOA uygulamasıyla karşılaştırılacak anlık API durumunu gösterir."""
+    return "✅ UYGUN" if bool(item.get("rawState", item.get("confirmedState", False))) else "❌ UYGUN DEĞİL"
 
 
-def map_url(state):
-    lat = state.get("latitude")
-    lon = state.get("longitude")
-    if lat is not None and lon is not None:
-        try:
-            return f"https://www.google.com/maps/search/?api=1&query={float(lat):.6f},{float(lon):.6f}"
-        except (TypeError, ValueError):
-            pass
-    address = str(state.get("address") or state.get("name") or "").strip()
-    return f"https://www.google.com/maps/search/?api=1&query={quote(address)}" if address else None
-
-
-def map_line(state):
-    url = map_url(state)
-    return f"🗺️ Haritada aç: {url}" if url else None
+def confirmation_note(item):
+    """Anlık DOA durumu ile alarm doğrulaması farklıysa bunu açıkça belirtir."""
+    raw_state = bool(item.get("rawState", False))
+    confirmed_state = bool(item.get("confirmedState", False))
+    if raw_state == confirmed_state:
+        return None
+    count = int(item.get("stateCandidateCount", 0) or 0)
+    if raw_state:
+        return f"⏳ Tekrar uygun doğrulaması: {count}/{RETURN_CONFIRM_COUNT}"
+    return "⚠️ DOA anlık olarak uygun değil; alarm durumu hemen kapatıldı."
 
 
 def eta_text(item):
@@ -105,31 +100,44 @@ def heading(state):
     return f"🎯 MUĞLA MERKEZ HEDEFİ · {region}" if state.get("type") == "target" else f"🚨 ERKEN UYARI · {str(region).upper()}"
 
 
-def card(state):
+def bin_lines(kind, item, include_eta=True):
+    level = clamp(item.get("filteredLevel", item.get("level", 0)))
+    lines = [bin_label(kind), make_bar(level), f"%{level} · {doa_suitability_text(item)}"]
+    note = confirmation_note(item)
+    if note:
+        lines.append(note)
+    if include_eta:
+        estimate = eta_text(item)
+        if estimate:
+            lines.append(estimate)
+    return lines
+
+
+def command_card(state):
     lines = [
-        "♻️ DOA MAKİNE DURUMU",
-        heading(state),
         f"📍 {state.get('name', 'Bilinmeyen Makine')}",
         f"🚚 Operasyon önceliği: {state.get('operationPriority', 'DÜŞÜK')}",
         "",
     ]
     for kind, item in (state.get("bins") or {}).items():
-        level = clamp(item.get("filteredLevel", item.get("level", 0)))
-        lines.extend([bin_label(kind), make_bar(level), f"%{level} · {suitability_text(item)}"])
-        estimate = eta_text(item)
-        if estimate:
-            lines.append(estimate)
+        lines.extend(bin_lines(kind, item))
         lines.append("")
-    location = map_line(state)
-    if location:
-        lines.extend([location, ""])
     checked = state.get("lastChecked")
-    try:
-        checked_text = datetime.fromisoformat(checked).astimezone(TZ).strftime("%d.%m.%Y %H:%M") if checked else datetime.now(TZ).strftime("%d.%m.%Y %H:%M")
-    except (TypeError, ValueError):
-        checked_text = str(checked)
-    lines.append(f"🕒 Son kontrol: {checked_text}")
+    if checked:
+        try:
+            checked_text = datetime.fromisoformat(checked).astimezone(TZ).strftime("%d.%m.%Y %H:%M")
+        except (TypeError, ValueError):
+            checked_text = str(checked)
+        lines.append(f"🕒 Son kontrol: {checked_text}")
     return "\n".join(lines).strip()
+
+
+def card(state):
+    return "\n".join([
+        "♻️ DOA MAKİNE DURUMU",
+        heading(state),
+        command_card(state),
+    ]).strip()
 
 
 def change_title(item):
@@ -177,20 +185,16 @@ def alert(state):
                 f"🔔 {bin_label(kind)} · {title}",
                 f"Önce  {make_bar(previous_level)}  %{previous_level}",
                 f"Şimdi {make_bar(current_level)}  %{current_level}",
-                f"Durum: {suitability_text(item)}",
-                "",
+                f"DOA anlık durum: {doa_suitability_text(item)}",
             ])
+            note = confirmation_note(item)
+            if note:
+                details.append(note)
+            details.append("")
         else:
-            details.extend([
-                bin_label(kind),
-                make_bar(current_level),
-                f"%{current_level} · {suitability_text(item)}",
-                "",
-            ])
+            details.extend(bin_lines(kind, item, include_eta=False))
+            details.append("")
 
-    location = map_line(state)
-    if location:
-        details.extend([location, ""])
     event = "✅ MAKİNE BOŞALTILDI" if state.get("simultaneousEmptying") else "🔔 DOA DURUM DEĞİŞİKLİĞİ"
     return "\n".join([
         event,
