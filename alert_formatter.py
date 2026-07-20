@@ -24,12 +24,10 @@ def bin_label(kind):
 
 
 def doa_suitability_text(item):
-    """DOA uygulamasıyla karşılaştırılacak anlık API durumunu gösterir."""
     return "✅ UYGUN" if bool(item.get("rawState", item.get("confirmedState", False))) else "❌ UYGUN DEĞİL"
 
 
 def confirmation_note(item):
-    """Anlık DOA durumu ile alarm doğrulaması farklıysa bunu açıkça belirtir."""
     raw_state = bool(item.get("rawState", False))
     confirmed_state = bool(item.get("confirmedState", False))
     if raw_state == confirmed_state:
@@ -38,6 +36,11 @@ def confirmation_note(item):
     if raw_state:
         return f"⏳ Tekrar uygun doğrulaması: {count}/{RETURN_CONFIRM_COUNT}"
     return "⚠️ DOA anlık olarak uygun değil; alarm durumu hemen kapatıldı."
+
+
+def map_line(state):
+    # DOA makine bağlantı biçimi doğrulanana kadar harita bağlantısı üretilmez.
+    return None
 
 
 def eta_text(item):
@@ -133,11 +136,7 @@ def command_card(state):
 
 
 def card(state):
-    return "\n".join([
-        "♻️ DOA MAKİNE DURUMU",
-        heading(state),
-        command_card(state),
-    ]).strip()
+    return "\n".join(["♻️ DOA MAKİNE DURUMU", heading(state), command_card(state)]).strip()
 
 
 def change_title(item):
@@ -151,7 +150,6 @@ def change_title(item):
     confirmed_band = item.get("confirmedBand")
     previous_level = clamp(item.get("_previousLevel"))
     current_level = clamp(item.get("filteredLevel", item.get("level", 0)))
-
     if confirmed_band == "empty" and previous_level >= 80 and current_level <= 20:
         return "✅ BOŞALTILDI"
     if state_changed and not current_state:
@@ -171,7 +169,6 @@ def alert(state):
     changes = {kind: title for kind, title in changes.items() if title}
     if not changes:
         return None
-
     details = []
     order = [kind for kind in ("pet", "glass", "aluminum", "can") if kind in bins]
     order += [kind for kind in bins if kind not in order]
@@ -194,7 +191,6 @@ def alert(state):
         else:
             details.extend(bin_lines(kind, item, include_eta=False))
             details.append("")
-
     event = "✅ MAKİNE BOŞALTILDI" if state.get("simultaneousEmptying") else "🔔 DOA DURUM DEĞİŞİKLİĞİ"
     return "\n".join([
         event,
