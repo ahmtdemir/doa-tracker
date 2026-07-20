@@ -1,3 +1,4 @@
+import unicodedata
 import unittest
 
 from alert_formatter import (
@@ -6,6 +7,11 @@ from alert_formatter import (
     safe_apply_simultaneous_emptying,
     safe_confirm_boolean,
 )
+
+
+def searchable(value):
+    normalized = unicodedata.normalize("NFKD", str(value or ""))
+    return "".join(char for char in normalized if not unicodedata.combining(char)).casefold()
 
 
 class AlertLogicTests(unittest.TestCase):
@@ -27,7 +33,7 @@ class AlertLogicTests(unittest.TestCase):
             "_previousLevel": 88,
             "level": 92,
         }
-        self.assertIn("kritik", change_title(item).lower())
+        self.assertIn("kritik", searchable(change_title(item)))
 
     def test_unsuitable_is_immediate(self):
         item = {
@@ -37,7 +43,7 @@ class AlertLogicTests(unittest.TestCase):
             "_previousLevel": 65,
             "level": 82,
         }
-        self.assertIn("uygun değil", change_title(item).lower())
+        self.assertIn("uygun degil", searchable(change_title(item)))
 
     def test_return_to_suitable_needs_two_samples(self):
         old = {"confirmedState": False, "stateCandidate": None, "stateCandidateCount": 0}
@@ -68,7 +74,7 @@ class AlertLogicTests(unittest.TestCase):
             "_previousLevel": 83,
             "level": 38,
         }
-        self.assertIn("sert", change_title(item).lower())
+        self.assertIn("sert", searchable(change_title(item)))
 
     def test_card_order_is_glass_pet_aluminum(self):
         state = {
