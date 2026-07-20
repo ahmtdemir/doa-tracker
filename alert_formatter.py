@@ -2,7 +2,8 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 TZ = ZoneInfo("Europe/Istanbul")
-RETURN_CONFIRM_COUNT = 3
+RETURN_CONFIRM_COUNT = 2
+BIN_ORDER = ("glass", "pet", "aluminum", "can")
 
 
 def clamp(value):
@@ -14,17 +15,31 @@ def clamp(value):
 
 def make_bar(level):
     level = clamp(level)
-    count = max(0, min(10, int(round(level / 10))))
+    count = max(0, min(5, int(round(level / 20))))
     symbol = "🟩" if level <= 40 else "🟨" if level <= 79 else "🟧" if level <= 89 else "🟥"
-    return symbol * count + "⬜" * (10 - count)
+    return symbol * count + "▫️" * (5 - count)
 
 
 def bin_label(kind):
     return {"pet": "PET", "glass": "CAM", "aluminum": "ALÜMİNYUM", "can": "ALÜMİNYUM"}.get(kind, str(kind).upper())
 
 
+def ordered_bins(bins):
+    order = [kind for kind in BIN_ORDER if kind in bins]
+    order += [kind for kind in bins if kind not in order]
+    return order
+
+
+def live_level(item):
+    return clamp(item.get("level", item.get("filteredLevel", 0)))
+
+
+def previous_level(item):
+    return clamp(item.get("_previousLevel"))
+
+
 def doa_suitability_text(item):
-    return "✅ UYGUN" if bool(item.get("rawState", item.get("confirmedState", False))) else "❌ UYGUN DEĞİL"
+    return "✅ Uygun" if bool(item.get("rawState", item.get("confirmedState", False))) else "❌ Uygun değil"
 
 
 def confirmation_note(item):
@@ -34,12 +49,11 @@ def confirmation_note(item):
         return None
     count = int(item.get("stateCandidateCount", 0) or 0)
     if raw_state:
-        return f"⏳ Tekrar uygun doğrulaması: {count}/{RETURN_CONFIRM_COUNT}"
-    return "⚠️ DOA anlık olarak uygun değil; alarm durumu hemen kapatıldı."
+        return f"⏳ Uygunluk doğrulanıyor: {count}/{RETURN_CONFIRM_COUNT}"
+    return None
 
 
 def map_line(state):
-    # DOA makine bağlantı biçimi doğrulanana kadar harita bağlantısı üretilmez.
     return None
 
 
@@ -48,10 +62,10 @@ def eta_text(item):
     if hours is None:
         return None
     if hours < 1:
-        return "⏳ Tahmini dolum: 1 saatten az"
+        return "Tahmini dolum: <1 saat"
     if hours < 24:
-        return f"⏳ Tahmini dolum: ≈ {hours:g} saat"
-    return f"⏳ Tahmini dolum: ≈ {hours / 24:.1f} gün"
+        return f"Tahmini dolum: ≈{hours:g} saat"
+    return f"Tahmini dolum: ≈{hours / 24:.1f} gün"
 
 
 def safe_confirm_boolean(raw_value, old):
@@ -73,39 +87,33 @@ def safe_confirm_boolean(raw_value, old):
 
 def safe_apply_simultaneous_emptying(state, old):
     old_bins = (old or {}).get("bins", {})
-    emptied = []
+    definitely_emptied = []
     for kind, item in state.get("bins", {}).items():
         previous = old_bins.get(kind, {})
-        previous_level = clamp(previous.get("filteredLevel", previous.get("level", 0)))
-        current_level = clamp(item.get("level", 0))
-        if previous_level >= 80 and current_level <= 20 and previous_level - current_level >= 60:
-            emptied.append(kind)
-    if len(emptied) < 2:
+        before = clamp(previous.get("level", previous.get("filteredLevel", 0)))
+        current = live_level(item)
+        if before >= 75 and current <= 25 and before - current >= 50:
+            definitely_emptied.append(kind)
+            item["_definiteEmptying"] = True
+            item["_changed"] = True
+            item["_previousLevel"] = before
+            item["estimatedHoursToFull"] = None
+    if not definitely_emptied:
         return False
-    for kind in emptied:
-        item = state["bins"][kind]
-        previous = old_bins.get(kind, {})
-        item["filteredLevel"] = clamp(item.get("level", 0))
-        item["confirmedBand"] = "empty"
-        item["candidateBand"] = None
-        item["candidateCount"] = 0
-        item["estimatedHoursToFull"] = None
-        item["_changed"] = True
-        item["_previousBand"] = previous.get("confirmedBand")
-        item["_previousLevel"] = previous.get("filteredLevel", previous.get("level"))
-    state["simultaneousEmptying"] = True
+    state["simultaneousEmptying"] = len(definitely_emptied) >= 2
     state["lastEmptiedAt"] = datetime.now(TZ).isoformat()
     return True
 
 
 def heading(state):
     region = state.get("label", "")
-    return f"🎯 MUĞLA MERKEZ HEDEFİ · {region}" if state.get("type") == "target" else f"🚨 ERKEN UYARI · {str(region).upper()}"
+    prefix = "HEDEF" if state.get("type") == "target" else "ERKEN UYARI"
+    return f"{prefix} · {str(region).upper()}"
 
 
 def bin_lines(kind, item, include_eta=True):
-    level = clamp(item.get("filteredLevel", item.get("level", 0)))
-    lines = [bin_label(kind), make_bar(level), f"%{level} · {doa_suitability_text(item)}"]
+    level = live_level(item)
+    lines = [f"{bin_label(kind)}  {make_bar(level)}  %{level} · {doa_suitability_text(item)}"]
     note = confirmation_note(item)
     if note:
         lines.append(note)
@@ -119,47 +127,46 @@ def bin_lines(kind, item, include_eta=True):
 def command_card(state):
     lines = [
         f"📍 {state.get('name', 'Bilinmeyen Makine')}",
-        f"🚚 Operasyon önceliği: {state.get('operationPriority', 'DÜŞÜK')}",
+        f"Öncelik: {state.get('operationPriority', 'DÜŞÜK')}",
         "",
     ]
-    for kind, item in (state.get("bins") or {}).items():
-        lines.extend(bin_lines(kind, item))
-        lines.append("")
+    bins = state.get("bins") or {}
+    for kind in ordered_bins(bins):
+        lines.extend(bin_lines(kind, bins[kind]))
     checked = state.get("lastChecked")
     if checked:
         try:
-            checked_text = datetime.fromisoformat(checked).astimezone(TZ).strftime("%d.%m.%Y %H:%M")
+            checked_text = datetime.fromisoformat(checked).astimezone(TZ).strftime("%d.%m %H:%M")
         except (TypeError, ValueError):
             checked_text = str(checked)
-        lines.append(f"🕒 Son kontrol: {checked_text}")
+        lines.extend(["", f"Son kontrol: {checked_text}"])
     return "\n".join(lines).strip()
 
 
 def card(state):
-    return "\n".join(["♻️ DOA MAKİNE DURUMU", heading(state), command_card(state)]).strip()
+    return "\n".join(["♻️ DOA DURUM", heading(state), command_card(state)]).strip()
 
 
 def change_title(item):
-    if not item.get("_changed"):
-        return None
+    before = previous_level(item)
+    current = live_level(item)
+    drop = before - current
     previous_state = item.get("_previousState")
-    current_state = bool(item.get("confirmedState", False))
-    raw_state = bool(item.get("rawState", False))
-    state_changed = previous_state is not None and previous_state != current_state
-    previous_band = item.get("_previousBand")
-    confirmed_band = item.get("confirmedBand")
-    previous_level = clamp(item.get("_previousLevel"))
-    current_level = clamp(item.get("filteredLevel", item.get("level", 0)))
-    if confirmed_band == "empty" and previous_level >= 80 and current_level <= 20:
-        return "✅ BOŞALTILDI"
-    if state_changed and not current_state:
-        return "❌ UYGUN DEĞİL"
-    if state_changed and current_state and raw_state and confirmed_band in {"empty", "available"} and current_level <= 40:
-        return "✅ TEKRAR UYGUN"
-    if confirmed_band == "nearly_full" and previous_band != "nearly_full" and 80 <= current_level <= 89:
-        return "⚠️ NEREDEYSE DOLU"
-    if confirmed_band == "critical" and previous_band != "critical" and current_level >= 90:
-        return "🚨 DOLULUK KRİTİK"
+    confirmed_state = bool(item.get("confirmedState", False))
+    state_changed = previous_state is not None and previous_state != confirmed_state
+
+    if item.get("_definiteEmptying") or (before >= 75 and current <= 25 and drop >= 50):
+        return "✅ Boşaltıldı"
+    if before >= 70 and drop >= 40:
+        return "↘️ Sert seviye düşüşü"
+    if state_changed and not confirmed_state:
+        return "❌ Uygun değil"
+    if state_changed and confirmed_state:
+        return "✅ Tekrar uygun"
+    if before < 90 <= current:
+        return "🚨 Doluluk kritik"
+    if before < 80 <= current < 90:
+        return "⚠️ Neredeyse dolu"
     return None
 
 
@@ -169,35 +176,32 @@ def alert(state):
     changes = {kind: title for kind, title in changes.items() if title}
     if not changes:
         return None
+
     details = []
-    order = [kind for kind in ("pet", "glass", "aluminum", "can") if kind in bins]
-    order += [kind for kind in bins if kind not in order]
-    for kind in order:
+    for kind in ordered_bins(bins):
         item = bins[kind]
-        current_level = clamp(item.get("filteredLevel", item.get("level", 0)))
         title = changes.get(kind)
         if title:
-            previous_level = clamp(item.get("_previousLevel"))
+            before = previous_level(item)
+            current = live_level(item)
             details.extend([
-                f"🔔 {bin_label(kind)} · {title}",
-                f"Önce  {make_bar(previous_level)}  %{previous_level}",
-                f"Şimdi {make_bar(current_level)}  %{current_level}",
-                f"DOA anlık durum: {doa_suitability_text(item)}",
+                f"{bin_label(kind)} · {title}",
+                f"%{before} → %{current} · {doa_suitability_text(item)}",
             ])
             note = confirmation_note(item)
             if note:
                 details.append(note)
-            details.append("")
         else:
             details.extend(bin_lines(kind, item, include_eta=False))
-            details.append("")
-    event = "✅ MAKİNE BOŞALTILDI" if state.get("simultaneousEmptying") else "🔔 DOA DURUM DEĞİŞİKLİĞİ"
+
+    event = "♻️ BOŞALTILMA" if any("Boşaltıldı" in title for title in changes.values()) else "🔔 DOA DEĞİŞİKLİĞİ"
     return "\n".join([
         event,
         heading(state),
         f"📍 {state.get('name', 'Bilinmeyen Makine')}",
-        f"🚚 Operasyon önceliği: {state.get('operationPriority', 'DÜŞÜK')}",
+        f"Öncelik: {state.get('operationPriority', 'DÜŞÜK')}",
         "",
         *details,
-        f"🕒 {datetime.now(TZ).strftime('%d.%m.%Y %H:%M')}",
+        "",
+        datetime.now(TZ).strftime("%d.%m %H:%M"),
     ]).strip()
