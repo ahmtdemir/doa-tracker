@@ -9,6 +9,7 @@ from telegram import telegram_gonder, telegram_komutlarini_al
 
 TZ = ZoneInfo("Europe/Istanbul")
 WORKFLOW_HISTORY = Path("workflow_runs.jsonl")
+RETURN_CONFIRM_COUNT = 3
 
 
 def normalize(text):
@@ -34,7 +35,18 @@ def bin_name(kind):
 
 
 def suitability_text(item):
-    return "✅ UYGUN" if item.get("confirmedState", item.get("state", True)) else "❌ UYGUN DEĞİL"
+    return "✅ UYGUN" if bool(item.get("rawState", item.get("confirmedState", item.get("state", True)))) else "❌ UYGUN DEĞİL"
+
+
+def confirmation_note(item):
+    raw_state = bool(item.get("rawState", False))
+    confirmed_state = bool(item.get("confirmedState", False))
+    if raw_state == confirmed_state:
+        return None
+    count = int(item.get("stateCandidateCount", 0) or 0)
+    if raw_state:
+        return f"⏳ Tekrar uygun doğrulaması: {count}/{RETURN_CONFIRM_COUNT}"
+    return "⚠️ DOA anlık olarak uygun değil."
 
 
 def eta_text(item):
@@ -57,6 +69,9 @@ def machine_card(state):
     for kind, item in (state.get("bins") or {}).items():
         level = level_of(item)
         lines.extend([bin_name(kind), bar(level), f"%{level} · {suitability_text(item)}"])
+        note = confirmation_note(item)
+        if note:
+            lines.append(note)
         estimate = eta_text(item)
         if estimate:
             lines.append(estimate)
@@ -119,7 +134,6 @@ def trigger_source_label(source):
 def trigger_report():
     if not WORKFLOW_HISTORY.exists():
         return "ℹ️ Henüz çalışma geçmişi bulunamadı."
-
     records = []
     for raw_line in WORKFLOW_HISTORY.read_text(encoding="utf-8").splitlines():
         line = raw_line.strip()
@@ -129,10 +143,8 @@ def trigger_report():
             records.append(json.loads(line))
         except json.JSONDecodeError:
             continue
-
     if not records:
         return "ℹ️ Okunabilir çalışma kaydı bulunamadı."
-
     recent = records[-5:]
     lines = ["🔎 SON TETİKLEMELER", ""]
     for record in reversed(recent):
@@ -144,7 +156,6 @@ def trigger_report():
         except (TypeError, ValueError):
             time_text = str(started or "Bilinmiyor")
         lines.append(f"#{record.get('runNumber', '?')} · {time_text} · {source}")
-
     if len(records) >= 2:
         latest = records[-1]
         previous = records[-2]
@@ -154,14 +165,9 @@ def trigger_report():
             gap_seconds = abs((latest_dt - previous_dt).total_seconds())
         except (TypeError, ValueError):
             gap_seconds = None
-
         same_source = latest.get("triggerSource") == previous.get("triggerSource")
         if gap_seconds is not None and same_source and gap_seconds < 120:
-            lines.extend([
-                "",
-                f"⚠️ Aynı kaynaktan {round(gap_seconds)} saniye arayla iki çalışma görülmüş.",
-            ])
-
+            lines.extend(["", f"⚠️ Aynı kaynaktan {round(gap_seconds)} saniye arayla iki çalışma görülmüş."])
     return "\n".join(lines)
 
 
@@ -182,7 +188,6 @@ def send_region(states, region, chat_id):
         label = "takip edilen makineler" if region in {"all", "priority"} else region
         telegram_gonder(f"ℹ️ {label} için kayıtlı güncel makine bulunamadı.", chat_id)
         return
-
     if region == "Muğla Merkez":
         title = "🎯 MUĞLA MERKEZ — GÜNCEL DURUM"
     elif region == "priority":
@@ -192,7 +197,6 @@ def send_region(states, region, chat_id):
         title = "♻️ TÜM MAKİNELER — GÜNCEL DURUM"
     else:
         title = f"♻️ {str(region).upper()} — GÜNCEL DURUM"
-
     telegram_gonder(f"{title}\n\n" + "\n\n────────────\n\n".join(machine_card(item) for item in selected), chat_id)
 
 
