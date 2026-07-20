@@ -105,7 +105,7 @@ jobs:
 
       - name: Durum ve geçmiş dosyalarını kaydet
         run: |
-          if [ -z "$(git status --porcelain -- status.json machine_history.jsonl workflow_runs.jsonl)" ]; then
+          if [ -z "$(git status --porcelain -- status.json machine_history.jsonl alarm_history.jsonl workflow_runs.jsonl)" ]; then
             echo "Kaydedilecek değişiklik yok."
             exit 0
           fi
@@ -116,7 +116,7 @@ jobs:
           TEMP_DIR="$(mktemp -d)"
           export TEMP_DIR
 
-          for file in status.json machine_history.jsonl workflow_runs.jsonl; do
+          for file in status.json machine_history.jsonl alarm_history.jsonl workflow_runs.jsonl; do
             if [ -f "$file" ]; then
               cp "$file" "$TEMP_DIR/$file"
             fi
@@ -137,7 +137,7 @@ jobs:
           if local_status.exists():
               shutil.copyfile(local_status, Path("status.json"))
 
-          for filename in ("machine_history.jsonl", "workflow_runs.jsonl"):
+          for filename in ("machine_history.jsonl", "alarm_history.jsonl", "workflow_runs.jsonl"):
               remote_file = Path(filename)
               local_file = temp_dir / filename
               merged = []
@@ -156,7 +156,7 @@ jobs:
                   remote_file.write_text("\n".join(merged) + "\n", encoding="utf-8")
           PY
 
-            git add status.json machine_history.jsonl workflow_runs.jsonl
+            git add status.json machine_history.jsonl alarm_history.jsonl workflow_runs.jsonl
             if git diff --cached --quiet; then
               echo "Uzak dal zaten aynı verileri içeriyor."
               exit 0
