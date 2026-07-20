@@ -3,7 +3,7 @@ from zoneinfo import ZoneInfo
 
 import commands
 import scraper
-from alert_formatter import alert, card, map_line, safe_apply_simultaneous_emptying, safe_confirm_boolean
+from alert_formatter import alert, card, command_card, safe_apply_simultaneous_emptying, safe_confirm_boolean
 
 TZ = ZoneInfo("Europe/Istanbul")
 OPEN_HOUR = 8
@@ -19,22 +19,11 @@ def guarded_alert(state):
     return alert(state)
 
 
-base_command_card = commands.machine_card
-
-
-def command_card_with_map(state):
-    text = base_command_card(state)
-    location = map_line(state)
-    if location and location not in text:
-        text = text + "\n\n" + location
-    return text
-
-
 scraper.card = card
 scraper.alert = guarded_alert
 scraper.confirm_boolean = safe_confirm_boolean
 scraper.apply_simultaneous_emptying = safe_apply_simultaneous_emptying
-commands.machine_card = command_card_with_map
+commands.machine_card = command_card
 
 current_time = datetime.now(TZ)
 print(f"DOA Tracker başladı: {current_time.strftime('%d.%m.%Y %H:%M')}")
