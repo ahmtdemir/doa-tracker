@@ -8,10 +8,6 @@ on:
         required: false
         default: "manual"
 
-  schedule:
-    - cron: "*/5 * * * *"
-    - cron: "2,7,12,17,22,27,32,37,42,47,52,57 * * * *"
-
 permissions:
   contents: write
 
@@ -37,6 +33,9 @@ jobs:
       - name: Gerekli paketleri yükle
         run: pip install -r requirements.txt
 
+      - name: Alarm testlerini çalıştır
+        run: python -m unittest -v test_alert_formatter.py
+
       - name: Çalışma zamanını kaydet
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
@@ -52,10 +51,8 @@ jobs:
           from pathlib import Path
 
           history_file = Path("workflow_runs.jsonl")
-
           now_utc = datetime.now(timezone.utc)
           now_tr = now_utc.astimezone(ZoneInfo("Europe/Istanbul"))
-
           previous_time = None
 
           if history_file.exists():
@@ -64,28 +61,19 @@ jobs:
                   for line in history_file.read_text(encoding="utf-8").splitlines()
                   if line.strip()
               ]
-
               if lines:
                   try:
                       previous_record = json.loads(lines[-1])
-                      previous_time = datetime.fromisoformat(
-                          previous_record["startedAtUtc"]
-                      )
+                      previous_time = datetime.fromisoformat(previous_record["startedAtUtc"])
                   except (json.JSONDecodeError, KeyError, ValueError):
                       previous_time = None
 
           gap_minutes = None
-
           if previous_time is not None:
-              gap_minutes = round(
-                  (now_utc - previous_time).total_seconds() / 60,
-                  2
-              )
+              gap_minutes = round((now_utc - previous_time).total_seconds() / 60, 2)
 
           event_name = os.environ.get("GITHUB_EVENT_NAME")
-          trigger_source = os.environ.get("TRIGGER_SOURCE") or (
-              "github_schedule" if event_name == "schedule" else "manual"
-          )
+          trigger_source = os.environ.get("TRIGGER_SOURCE") or "manual"
 
           record = {
               "runNumber": os.environ.get("GITHUB_RUN_NUMBER"),
@@ -94,7 +82,7 @@ jobs:
               "workflow": os.environ.get("GITHUB_WORKFLOW_NAME"),
               "startedAtUtc": now_utc.isoformat(),
               "startedAtTurkey": now_tr.isoformat(),
-              "minutesSincePreviousRun": gap_minutes
+              "minutesSincePreviousRun": gap_minutes,
           }
 
           with history_file.open("a", encoding="utf-8") as file:
@@ -106,12 +94,6 @@ jobs:
           print(f"Run Number        : {record['runNumber']}")
           print(f"UTC               : {record['startedAtUtc']}")
           print(f"Türkiye           : {record['startedAtTurkey']}")
-
-          if gap_minutes is None:
-              print("Önceki çalışma    : İlk kayıt")
-          else:
-              print(f"Geçen süre        : {gap_minutes} dakika")
-
           print("=======================================")
           PY
 
@@ -142,7 +124,6 @@ jobs:
 
           for attempt in 1 2 3; do
             echo "Kayıt denemesi: $attempt/3"
-
             git fetch origin main
             git reset --hard origin/main
 
@@ -152,7 +133,6 @@ jobs:
           from pathlib import Path
 
           temp_dir = Path(os.environ["TEMP_DIR"])
-
           local_status = temp_dir / "status.json"
           if local_status.exists():
               shutil.copyfile(local_status, Path("status.json"))
@@ -160,14 +140,12 @@ jobs:
           for filename in ("machine_history.jsonl", "workflow_runs.jsonl"):
               remote_file = Path(filename)
               local_file = temp_dir / filename
-
               merged = []
               seen = set()
 
               for source in (remote_file, local_file):
                   if not source.exists():
                       continue
-
                   for raw_line in source.read_text(encoding="utf-8").splitlines():
                       line = raw_line.strip()
                       if line and line not in seen:
@@ -175,21 +153,16 @@ jobs:
                           merged.append(line)
 
               if merged:
-                  remote_file.write_text(
-                      "\n".join(merged) + "\n",
-                      encoding="utf-8"
-                  )
+                  remote_file.write_text("\n".join(merged) + "\n", encoding="utf-8")
           PY
 
             git add status.json machine_history.jsonl workflow_runs.jsonl
-
             if git diff --cached --quiet; then
               echo "Uzak dal zaten aynı verileri içeriyor."
               exit 0
             fi
 
             git commit -m "Update DOA status, history and workflow timing"
-
             if git push origin HEAD:main; then
               echo "Dosyalar başarıyla kaydedildi."
               exit 0
