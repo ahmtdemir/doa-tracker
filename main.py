@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 
 import commands
 import scraper
+from alarm_level_fix import use_previous_raw_level
 from alert_formatter import alert, card, command_card, safe_apply_simultaneous_emptying, safe_confirm_boolean
 
 TZ = ZoneInfo("Europe/Istanbul")
@@ -22,6 +23,7 @@ def guarded_alert(state):
 scraper.card = card
 scraper.alert = guarded_alert
 scraper.confirm_boolean = safe_confirm_boolean
+scraper.filtered_bin = use_previous_raw_level(scraper.filtered_bin)
 scraper.apply_simultaneous_emptying = safe_apply_simultaneous_emptying
 commands.machine_card = command_card
 
