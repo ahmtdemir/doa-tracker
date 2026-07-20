@@ -176,29 +176,26 @@ def alert(state):
     changes = {kind: title for kind, title in changes.items() if title}
     if not changes:
         return None
+
     details = []
     for kind in ordered_bins(bins):
         item = bins[kind]
-        title = changes.get(kind)
-        if title:
-            before = previous_level(item)
-            current = live_level(item)
-            details.extend([
-                f"🔔 {bin_label(kind)} · {title}",
-                f"Önce  {make_bar(before)}  %{before}",
-                f"Şimdi {make_bar(current)}  %{current}",
-                f"Durum: {doa_suitability_text(item)}",
-            ])
-            note = confirmation_note(item)
-            if note:
-                details.append(note)
-            details.append("")
+        before = previous_level(item)
+        current = live_level(item)
+
+        details.extend([bin_label(kind), make_bar(current)])
+        if kind in changes and before != current:
+            details.append(f"%{before} → %{current} · {doa_suitability_text(item)}")
         else:
-            details.extend(bin_lines(kind, item, include_eta=False))
-            details.append("")
-    event = "✅ MAKİNE BOŞALTILDI" if any("BOŞALTILDI" in title for title in changes.values()) else "🔔 DOA DURUM DEĞİŞİKLİĞİ"
+            details.append(f"%{current} · {doa_suitability_text(item)}")
+
+        note = confirmation_note(item)
+        if note:
+            details.append(note)
+        details.append("")
+
     return "\n".join([
-        event,
+        "DOA DURUM DEĞİŞİKLİĞİ",
         heading(state),
         f"📍 {state.get('name', 'Bilinmeyen Makine')}",
         f"🚚 Operasyon önceliği: {state.get('operationPriority', 'DÜŞÜK')}",
