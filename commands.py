@@ -4,12 +4,12 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from alert_formatter import command_card as machine_card
 from status_manager import durumlari_yukle
 from telegram import telegram_gonder, telegram_komutlarini_al
 
 TZ = ZoneInfo("Europe/Istanbul")
 WORKFLOW_HISTORY = Path("workflow_runs.jsonl")
-RETURN_CONFIRM_COUNT = 3
 
 
 def normalize(text):
@@ -18,72 +18,6 @@ def normalize(text):
     value = value.translate(replacements)
     value = re.sub(r"[^a-z0-9]+", " ", value)
     return " ".join(value.split())
-
-
-def level_of(item):
-    return int(item.get("filteredLevel", item.get("level", 0)) or 0)
-
-
-def bar(level):
-    count = max(0, min(10, int(round(level / 10))))
-    square = "🟩" if level <= 40 else "🟨" if level <= 79 else "🟧" if level <= 89 else "🟥"
-    return square * count + "⬜" * (10 - count)
-
-
-def bin_name(kind):
-    return {"pet": "PET", "glass": "CAM", "aluminum": "ALÜMİNYUM", "can": "ALÜMİNYUM"}.get(kind, str(kind).upper())
-
-
-def suitability_text(item):
-    return "✅ UYGUN" if bool(item.get("rawState", item.get("confirmedState", item.get("state", True)))) else "❌ UYGUN DEĞİL"
-
-
-def confirmation_note(item):
-    raw_state = bool(item.get("rawState", False))
-    confirmed_state = bool(item.get("confirmedState", False))
-    if raw_state == confirmed_state:
-        return None
-    count = int(item.get("stateCandidateCount", 0) or 0)
-    if raw_state:
-        return f"⏳ Tekrar uygun doğrulaması: {count}/{RETURN_CONFIRM_COUNT}"
-    return "⚠️ DOA anlık olarak uygun değil."
-
-
-def eta_text(item):
-    hours = item.get("estimatedHoursToFull")
-    if hours is None:
-        return None
-    if hours < 1:
-        return "⏳ Tahmini dolum: 1 saatten az"
-    if hours < 24:
-        return f"⏳ Tahmini dolum: ≈ {hours:g} saat"
-    return f"⏳ Tahmini dolum: ≈ {hours / 24:.1f} gün"
-
-
-def machine_card(state):
-    lines = [
-        f"📍 {state.get('name', 'Bilinmeyen Makine')}",
-        f"🚚 Operasyon önceliği: {state.get('operationPriority', 'DÜŞÜK')}",
-        "",
-    ]
-    for kind, item in (state.get("bins") or {}).items():
-        level = level_of(item)
-        lines.extend([bin_name(kind), bar(level), f"%{level} · {suitability_text(item)}"])
-        note = confirmation_note(item)
-        if note:
-            lines.append(note)
-        estimate = eta_text(item)
-        if estimate:
-            lines.append(estimate)
-        lines.append("")
-    checked = state.get("lastChecked")
-    if checked:
-        try:
-            checked_text = datetime.fromisoformat(checked).astimezone(TZ).strftime("%d.%m.%Y %H:%M")
-        except (TypeError, ValueError):
-            checked_text = str(checked)
-        lines.append(f"🕒 Son kontrol: {checked_text}")
-    return "\n".join(lines).strip()
 
 
 def resolve_region(command):
