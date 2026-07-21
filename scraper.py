@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
+from alert_formatter import alert, card
 from config import (
     API_URL,
     SEARCH_POINTS,
@@ -56,16 +57,6 @@ def band(level):
     if level <= 89:
         return "nearly_full"
     return "critical"
-
-
-def bar(level):
-    count = max(0, min(10, int(round(level / 10))))
-    square = "🟩" if level <= 40 else "🟨" if level <= 79 else "🟧" if level <= 89 else "🟥"
-    return square * count + "⬜" * (10 - count)
-
-
-def bin_name(value):
-    return {"pet": "PET", "glass": "CAM", "aluminum": "ALÜMİNYUM", "can": "ALÜMİNYUM"}.get(value, value.upper())
 
 
 def now():
@@ -255,55 +246,6 @@ def build_state(machine, rule, old=None):
     apply_simultaneous_emptying(state, old)
     machine_priority(state)
     return state
-
-
-def heading(state):
-    return f"🎯 MUĞLA MERKEZ HEDEFİ · {state['label']}" if state["type"] == "target" else f"🚨 ERKEN UYARI · {state['label'].upper()}"
-
-
-def suitability_text(item):
-    return "✅ UYGUN" if item.get("confirmedState", True) else "❌ UYGUN DEĞİL"
-
-
-def eta_text(item):
-    hours = item.get("estimatedHoursToFull")
-    if hours is None:
-        return None
-    if hours < 1:
-        return "⏳ Tahmini dolum: 1 saatten az"
-    if hours < 24:
-        return f"⏳ Tahmini dolum: ≈ {hours:g} saat"
-    return f"⏳ Tahmini dolum: ≈ {hours / 24:.1f} gün"
-
-
-def card(state):
-    lines = ["♻️ DOA MAKİNE DURUMU", heading(state), f"📍 {state['name']}", f"🚚 Operasyon önceliği: {state.get('operationPriority', 'DÜŞÜK')}", ""]
-    for kind, item in state["bins"].items():
-        level = item["filteredLevel"]
-        lines.extend([bin_name(kind), bar(level), f"%{level} · {suitability_text(item)}"])
-        estimate = eta_text(item)
-        if estimate:
-            lines.append(estimate)
-        lines.append("")
-    lines.append(f"🕒 Son kontrol: {now().strftime('%d.%m.%Y %H:%M')}")
-    return "\n".join(lines).strip()
-
-
-def alert(state):
-    lines = []
-    for kind, item in state["bins"].items():
-        if not item.get("_changed"):
-            continue
-        state_changed = item.get("_previousState") != item.get("confirmedState")
-        important_band = item["confirmedBand"] in {"empty", "nearly_full", "critical"}
-        if not state_changed and not important_band:
-            continue
-        title = "✅ BOŞALTILDI" if item["confirmedBand"] == "empty" else "❌ UYGUN DEĞİL" if not item.get("confirmedState", True) else "✅ TEKRAR UYGUN"
-        lines.extend([f"{bin_name(kind)}: {title}", f"%{item['_previousLevel']} → %{item['filteredLevel']}", ""])
-    if not lines:
-        return None
-    event_title = "✅ MAKİNE BOŞALTILDI" if state.get("simultaneousEmptying") else "🔔 DOA DURUM DEĞİŞİKLİĞİ"
-    return "\n".join([event_title, heading(state), f"📍 {state['name']}", "", *lines, f"🕒 {now().strftime('%d.%m.%Y %H:%M')}"]).strip()
 
 
 def fetch_machines():
