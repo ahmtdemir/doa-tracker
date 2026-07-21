@@ -2,6 +2,7 @@ from datetime import datetime
 from statistics import median
 from zoneinfo import ZoneInfo
 
+import json
 import requests
 
 from alert_formatter import alert, card
@@ -272,6 +273,8 @@ def siteyi_test_et():
     for machine_id, info in fetch_machines().items():
         machine = info["data"]
         name = machine.get("definition", {}).get("name", "Bilinmeyen Makine")
+        if "MİGROS GÜLLÜK MM MİGROS" in norm(name):
+            print("[DEBUG-GULLUK-RAW] " + json.dumps(machine, ensure_ascii=False, sort_keys=True))
         rule = classify(name, info["regions"])
         if not rule:
             continue
