@@ -52,10 +52,6 @@ def confirmation_note(item):
     return None
 
 
-def map_line(state):
-    return None
-
-
 def eta_text(item):
     hours = item.get("estimatedHoursToFull")
     if hours is None:
@@ -65,23 +61,6 @@ def eta_text(item):
     if hours < 24:
         return f"⏳ Tahmini dolum: ≈ {hours:g} saat"
     return f"⏳ Tahmini dolum: ≈ {hours / 24:.1f} gün"
-
-
-def safe_confirm_boolean(raw_value, old):
-    raw_value = bool(raw_value)
-    confirmed = old.get("confirmedState")
-    candidate = old.get("stateCandidate")
-    count = int(old.get("stateCandidateCount", 0) or 0)
-    if confirmed is None:
-        return raw_value, None, 0, False
-    if not raw_value:
-        return False, None, 0, confirmed is True
-    if confirmed is True:
-        return True, None, 0, False
-    count = count + 1 if candidate is True else 1
-    if count >= RETURN_CONFIRM_COUNT:
-        return True, None, 0, True
-    return False, True, count, False
 
 
 def safe_apply_simultaneous_emptying(state, old):
