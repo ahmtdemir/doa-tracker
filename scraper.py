@@ -63,11 +63,6 @@ def now():
     return datetime.now(TZ)
 
 
-def is_night(moment=None):
-    hour = (moment or now()).hour
-    return hour >= 22 or hour < 8
-
-
 def learned_tolerance(old, raw_level):
     previous_raw = old.get("level")
     noise_samples = list(old.get("noiseSamples", []))[-(NOISE_HISTORY_COUNT - 1):]
@@ -75,7 +70,7 @@ def learned_tolerance(old, raw_level):
         delta = abs(raw_level - clamp(previous_raw))
         if delta <= 14:
             noise_samples.append(delta)
-    base = 8 if is_night() else 5
+    base = 5
     learned = int(round(median(noise_samples))) + 2 if noise_samples else base
     return max(base, min(12, learned)), noise_samples
 
@@ -115,7 +110,7 @@ def update_fill_rate(old, filtered, checked_at):
         except (TypeError, ValueError):
             elapsed_hours = 0
         delta = filtered - clamp(previous_level)
-        if 0.05 <= elapsed_hours <= 3 and 0 < delta <= 25 and not is_night(checked_at):
+        if 0.05 <= elapsed_hours <= 3 and 0 < delta <= 25:
             hourly = delta / elapsed_hours
             if hourly <= 40:
                 samples.append(round(hourly, 2))
@@ -218,21 +213,6 @@ def machine_priority(state):
     state["operationPriority"] = "YÜKSEK" if score >= 115 else "ORTA" if score >= 85 else "DÜŞÜK"
 
 
-def schedule_fields(value, path=""):
-    found = {}
-    keywords = ("open", "close", "hour", "time", "schedule", "working", "day")
-    if isinstance(value, dict):
-        for key, item in value.items():
-            current_path = f"{path}.{key}" if path else str(key)
-            if any(keyword in str(key).lower() for keyword in keywords):
-                found[current_path] = item
-            found.update(schedule_fields(item, current_path))
-    elif isinstance(value, list):
-        for index, item in enumerate(value):
-            found.update(schedule_fields(item, f"{path}[{index}]"))
-    return found
-
-
 def build_state(machine, rule, old=None):
     old = old or {}
     checked_at = now()
@@ -247,14 +227,13 @@ def build_state(machine, rule, old=None):
         "active": machine.get("active"),
         "status": machine.get("status"),
         "openingClosingHours": machine.get("openingClosingHours"),
+        "weeklySchedule": machine.get("weeklySchedule") or [],
         "lastChecked": checked_at.isoformat(),
         "lastEmptiedAt": old.get("lastEmptiedAt"),
         "telegramMessageId": old.get("telegramMessageId"),
         "cardVersion": CARD_VERSION,
         "bins": {},
     }
-    if "BİM-AYDINLIKEVLER" in norm(state["name"]):
-        state["scheduleDebug"] = schedule_fields(machine)
     old_bins = old.get("bins", {})
     for item in machine.get("binList", []):
         kind = str(item.get("contentType", "unknown")).strip().lower()
