@@ -10,7 +10,7 @@ from alarm_level_fix import (
     confirm_boolean_two_way,
     use_alarm_memory,
 )
-from alert_formatter import alert, card, safe_apply_simultaneous_emptying
+from alert_formatter import alert, safe_apply_simultaneous_emptying
 
 TZ = ZoneInfo("Europe/Istanbul")
 OPEN_HOUR = 8
@@ -52,7 +52,6 @@ def history_with_alarm_record(machine_id, state):
 
 
 alert_formatter.change_title = change_title_with_alarm_memory
-scraper.card = card
 scraper.alert = guarded_alert
 scraper.confirm_boolean = confirm_boolean_two_way
 scraper.filtered_bin = use_alarm_memory(scraper.filtered_bin)
