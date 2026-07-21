@@ -40,6 +40,15 @@ SEARCH_POINTS = [
         "userLat": 37.0400,
         "userLon": 27.4300,
     },
+    {
+        "name": "GULLUK",
+        "label": "Güllük",
+        "lat": 37.2390,
+        "lon": 27.6010,
+        "distance": 15000,
+        "userLat": 37.2390,
+        "userLon": 27.6010,
+    },
 ]
 
 MAKINE_KURALLARI = {
@@ -57,6 +66,10 @@ MAKINE_KURALLARI = {
     },
     "CARREFOURSA MUĞLA BODRUM MERKEZ": {
         "label": "Bodrum",
+        "type": "early_warning",
+    },
+    "MİGROS GÜLLÜK MM MİGROS": {
+        "label": "Güllük",
         "type": "early_warning",
     },
 }
