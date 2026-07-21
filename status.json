@@ -1,6 +1,6 @@
 {
   "293c88df-f8ae-48c6-9f94-3e04f8d1c6fb": {
-    "active": false,
+    "active": true,
     "address": "KÖPRÜBAŞI MAH KAVACIK CADDE No:12A/0 MUĞLA/ULA",
     "bins": {
       "aluminum": {
@@ -13,10 +13,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 23,
         "lastAlertLevel": 20,
-        "lastRateChecked": "2026-07-21T08:56:12.566451+03:00",
-        "level": 21,
+        "lastRateChecked": "2026-07-21T09:01:19.257327+03:00",
+        "level": 22,
         "noiseSamples": [
-          0,
           0,
           5,
           0,
@@ -63,6 +62,7 @@
           1,
           1,
           0,
+          1,
           1
         ],
         "rateSamples": [
@@ -70,11 +70,11 @@
         ],
         "rawState": true,
         "samples": [
-          22,
           21,
           22,
           22,
-          21
+          21,
+          22
         ],
         "stateCandidate": null,
         "stateCandidateCount": 0
@@ -89,7 +89,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-21T08:56:12.566451+03:00",
+        "lastRateChecked": "2026-07-21T09:01:19.257327+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -163,10 +163,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 99,
         "lastAlertLevel": 93,
-        "lastRateChecked": "2026-07-21T08:56:12.566451+03:00",
+        "lastRateChecked": "2026-07-21T09:01:19.257327+03:00",
         "level": 97,
         "noiseSamples": [
-          1,
           2,
           1,
           0,
@@ -213,6 +212,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "rateSamples": [],
@@ -230,16 +230,16 @@
     },
     "cardVersion": 4,
     "label": "Ula",
-    "lastChecked": "2026-07-21T08:56:12.566451+03:00",
+    "lastChecked": "2026-07-21T09:01:19.257327+03:00",
     "lastEmptiedAt": "2026-07-20T13:26:10.004627+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
     "machineStatus": 0,
     "name": "A101 I821 KÖPRÜBAŞI",
-    "openingClosingHours": "09:00 'da açılıyor",
+    "openingClosingHours": "21:00 'da kapanıyor",
     "operationPriority": "YÜKSEK",
     "priorityScore": 129,
-    "status": 2,
+    "status": 1,
     "telegramMessageId": 80,
     "type": "early_warning"
   },
@@ -257,7 +257,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 93,
         "lastAlertLevel": 93,
-        "lastRateChecked": "2026-07-21T08:56:11.948909+03:00",
+        "lastRateChecked": "2026-07-21T09:01:18.203504+03:00",
         "level": 93,
         "noiseSamples": [
           0,
@@ -331,7 +331,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-21T08:56:11.948909+03:00",
+        "lastRateChecked": "2026-07-21T09:01:18.203504+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -405,7 +405,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-21T08:56:11.948909+03:00",
+        "lastRateChecked": "2026-07-21T09:01:18.203504+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -472,7 +472,7 @@
     },
     "cardVersion": 4,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-21T08:56:11.948909+03:00",
+    "lastChecked": "2026-07-21T09:01:18.203504+03:00",
     "lastEmptiedAt": null,
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
@@ -486,7 +486,7 @@
     "type": "target"
   },
   "639ed9ca-b5b3-419c-bec5-6f5296211cbe": {
-    "active": false,
+    "active": true,
     "address": "MUSLİHİTTİN MAH Umut Sok. Şeyh Muslihittin Camii No:2/1 MUĞLA/MENTEŞE",
     "bins": {
       "aluminum": {
@@ -499,7 +499,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 92,
         "lastAlertLevel": 92,
-        "lastRateChecked": "2026-07-21T08:56:11.583722+03:00",
+        "lastRateChecked": "2026-07-21T09:01:17.654857+03:00",
         "level": 92,
         "noiseSamples": [
           0,
@@ -573,7 +573,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-21T08:56:11.583722+03:00",
+        "lastRateChecked": "2026-07-21T09:01:17.654857+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -647,7 +647,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 91,
         "lastAlertLevel": 91,
-        "lastRateChecked": "2026-07-21T08:56:11.583722+03:00",
+        "lastRateChecked": "2026-07-21T09:01:17.654857+03:00",
         "level": 91,
         "noiseSamples": [
           0,
@@ -714,21 +714,21 @@
     },
     "cardVersion": 4,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-21T08:56:11.583722+03:00",
+    "lastChecked": "2026-07-21T09:01:17.654857+03:00",
     "lastEmptiedAt": null,
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
     "machineStatus": 0,
     "name": "Q681 BİM NERGİS / MENTEŞE - MUĞLA",
-    "openingClosingHours": "09:00 'da açılıyor",
+    "openingClosingHours": "21:00 'da kapanıyor",
     "operationPriority": "YÜKSEK",
     "priorityScore": 167,
-    "status": 2,
+    "status": 1,
     "telegramMessageId": 77,
     "type": "target"
   },
   "f5d69247-1c08-4f21-9a20-e402fa48e20c": {
-    "active": false,
+    "active": true,
     "address": "AYDINLIKEVLER MAH Pazaryeri Sok. No:3\tA/1 MUĞLA/MİLAS",
     "bins": {
       "aluminum": {
@@ -741,7 +741,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 95,
         "lastAlertLevel": 91,
-        "lastRateChecked": "2026-07-21T08:56:11.277487+03:00",
+        "lastRateChecked": "2026-07-21T09:01:17.112853+03:00",
         "level": 95,
         "noiseSamples": [
           0,
@@ -778,10 +778,10 @@
           0,
           0,
           0,
+          1,
+          1,
+          1,
           0,
-          1,
-          1,
-          1,
           0,
           0,
           0,
@@ -817,7 +817,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-21T08:56:11.277487+03:00",
+        "lastRateChecked": "2026-07-21T09:01:17.112853+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -891,7 +891,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-21T08:56:11.277487+03:00",
+        "lastRateChecked": "2026-07-21T09:01:17.112853+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -958,21 +958,21 @@
     },
     "cardVersion": 4,
     "label": "Milas",
-    "lastChecked": "2026-07-21T08:56:11.277487+03:00",
+    "lastChecked": "2026-07-21T09:01:17.112853+03:00",
     "lastEmptiedAt": null,
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
     "machineStatus": 0,
     "name": "BİM-AYDINLIKEVLER",
-    "openingClosingHours": "09:00 'da açılıyor",
+    "openingClosingHours": "21:00 'da kapanıyor",
     "operationPriority": "YÜKSEK",
     "priorityScore": 142,
-    "status": 2,
+    "status": 1,
     "telegramMessageId": 76,
     "type": "early_warning"
   },
   "fb151f25-cad7-40f5-bffd-ba8c597e6ab5": {
-    "active": false,
+    "active": true,
     "address": "AYAZKIYI MAH Rauf Gündüz Cad No:13\tA/1 MUĞLA/ULA",
     "bins": {
       "aluminum": {
@@ -985,7 +985,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 91,
         "lastAlertLevel": 91,
-        "lastRateChecked": "2026-07-21T08:56:12.261958+03:00",
+        "lastRateChecked": "2026-07-21T09:01:18.740827+03:00",
         "level": 91,
         "noiseSamples": [
           0,
@@ -1059,7 +1059,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-21T08:56:12.261958+03:00",
+        "lastRateChecked": "2026-07-21T09:01:18.740827+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -1133,7 +1133,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 99,
         "lastAlertLevel": 100,
-        "lastRateChecked": "2026-07-21T08:56:12.261958+03:00",
+        "lastRateChecked": "2026-07-21T09:01:18.740827+03:00",
         "level": 100,
         "noiseSamples": [
           0,
@@ -1200,21 +1200,21 @@
     },
     "cardVersion": 4,
     "label": "Ula",
-    "lastChecked": "2026-07-21T08:56:12.261958+03:00",
+    "lastChecked": "2026-07-21T09:01:18.740827+03:00",
     "lastEmptiedAt": null,
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
     "machineStatus": 0,
     "name": "BİM-ULA",
-    "openingClosingHours": "09:00 'da açılıyor",
+    "openingClosingHours": "21:00 'da kapanıyor",
     "operationPriority": "YÜKSEK",
     "priorityScore": 144,
-    "status": 2,
+    "status": 1,
     "telegramMessageId": 79,
     "type": "early_warning"
   },
   "ff68d07b-7e2d-4c2a-a61d-ba63a61c410f": {
-    "active": false,
+    "active": true,
     "address": "CUMHURİYET MAH 166 SOK. No:6/1 MUĞLA/YATAĞAN",
     "bins": {
       "aluminum": {
@@ -1227,10 +1227,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 100,
         "lastAlertLevel": 100,
-        "lastRateChecked": "2026-07-21T08:56:12.898533+03:00",
+        "lastRateChecked": "2026-07-21T09:01:19.885984+03:00",
         "level": 96,
         "noiseSamples": [
-          0,
           0,
           0,
           0,
@@ -1277,13 +1276,14 @@
           1,
           1,
           0,
+          0,
           0
         ],
         "rateSamples": [],
         "rawState": false,
         "samples": [
-          96,
           95,
+          96,
           96,
           96,
           96
@@ -1301,7 +1301,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-21T08:56:12.898533+03:00",
+        "lastRateChecked": "2026-07-21T09:01:19.885984+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -1375,10 +1375,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 93,
         "lastAlertLevel": 90,
-        "lastRateChecked": "2026-07-21T08:56:12.898533+03:00",
+        "lastRateChecked": "2026-07-21T09:01:19.885984+03:00",
         "level": 91,
         "noiseSamples": [
-          0,
           5,
           12,
           3,
@@ -1425,6 +1424,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "rateSamples": [
@@ -1444,16 +1444,16 @@
     },
     "cardVersion": 4,
     "label": "Yatağan",
-    "lastChecked": "2026-07-21T08:56:12.898533+03:00",
+    "lastChecked": "2026-07-21T09:01:19.885984+03:00",
     "lastEmptiedAt": "2026-07-20T17:51:18.182002+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
     "machineStatus": 0,
     "name": "D247 BİM YATAĞAN / YATAĞAN - MUĞLA",
-    "openingClosingHours": "09:00 'da açılıyor",
+    "openingClosingHours": "21:00 'da kapanıyor",
     "operationPriority": "YÜKSEK",
     "priorityScore": 145,
-    "status": 2,
+    "status": 1,
     "telegramMessageId": 81,
     "type": "early_warning"
   }
