@@ -1,11 +1,11 @@
 import unicodedata
 import unittest
 
+from alarm_level_fix import confirm_boolean_two_way as safe_confirm_boolean
 from alert_formatter import (
     change_title,
     command_card,
     safe_apply_simultaneous_emptying,
-    safe_confirm_boolean,
 )
 
 
