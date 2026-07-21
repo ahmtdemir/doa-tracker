@@ -218,6 +218,21 @@ def machine_priority(state):
     state["operationPriority"] = "YÜKSEK" if score >= 115 else "ORTA" if score >= 85 else "DÜŞÜK"
 
 
+def schedule_fields(value, path=""):
+    found = {}
+    keywords = ("open", "close", "hour", "time", "schedule", "working", "day")
+    if isinstance(value, dict):
+        for key, item in value.items():
+            current_path = f"{path}.{key}" if path else str(key)
+            if any(keyword in str(key).lower() for keyword in keywords):
+                found[current_path] = item
+            found.update(schedule_fields(item, current_path))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            found.update(schedule_fields(item, f"{path}[{index}]"))
+    return found
+
+
 def build_state(machine, rule, old=None):
     old = old or {}
     checked_at = now()
@@ -238,6 +253,8 @@ def build_state(machine, rule, old=None):
         "cardVersion": CARD_VERSION,
         "bins": {},
     }
+    if "BİM-AYDINLIKEVLER" in norm(state["name"]):
+        state["scheduleDebug"] = schedule_fields(machine)
     old_bins = old.get("bins", {})
     for item in machine.get("binList", []):
         kind = str(item.get("contentType", "unknown")).strip().lower()
