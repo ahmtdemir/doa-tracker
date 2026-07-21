@@ -68,7 +68,3 @@ def change_title_with_alarm_memory(item):
     if title:
         item["lastAlertLevel"] = current
     return title
-
-
-# Geriye dönük uyumluluk: mevcut import adı çalışmaya devam etsin.
-use_previous_raw_level = use_alarm_memory
