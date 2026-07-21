@@ -37,19 +37,31 @@ def previous_level(item):
     return clamp(item.get("_previousLevel"))
 
 
+def suitability_status(item):
+    raw_state = bool(item.get("rawState", False))
+    confirmed_state = bool(item.get("confirmedState", False))
+    count = int(item.get("stateCandidateCount", 0) or 0)
+
+    if raw_state != confirmed_state:
+        if raw_state:
+            return (
+                "⏳ UYGUNLUK DEĞERLENDİRİLİYOR",
+                f"⏳ Tekrar uygun doğrulaması: {count}/{RETURN_CONFIRM_COUNT}",
+            )
+        return (
+            "⏳ UYGUNSUZLUK DEĞERLENDİRİLİYOR",
+            f"⏳ Uygun değil doğrulaması: {count}/{RETURN_CONFIRM_COUNT}",
+        )
+
+    return ("✅ UYGUN", None) if confirmed_state else ("❌ UYGUN DEĞİL", None)
+
+
 def doa_suitability_text(item):
-    return "✅ UYGUN" if bool(item.get("rawState", item.get("confirmedState", False))) else "❌ UYGUN DEĞİL"
+    return suitability_status(item)[0]
 
 
 def confirmation_note(item):
-    raw_state = bool(item.get("rawState", False))
-    confirmed_state = bool(item.get("confirmedState", False))
-    if raw_state == confirmed_state:
-        return None
-    count = int(item.get("stateCandidateCount", 0) or 0)
-    if raw_state:
-        return f"⏳ Tekrar uygun doğrulaması: {count}/{RETURN_CONFIRM_COUNT}"
-    return None
+    return suitability_status(item)[1]
 
 
 def eta_text(item):
