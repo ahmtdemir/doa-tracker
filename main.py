@@ -20,13 +20,25 @@ OPENING_STABILIZATION_MINUTES = 20
 _original_gecmis_kaydi_ekle = scraper.gecmis_kaydi_ekle
 
 
+def clarify_pending_suitability(message):
+    if not message:
+        return message
+    lines = message.splitlines()
+    for index, line in enumerate(lines):
+        if line.startswith("⏳ Tekrar uygun doğrulaması:") and index > 0:
+            lines[index - 1] = lines[index - 1].replace(
+                "✅ UYGUN", "⏳ UYGUNLUK DEĞERLENDİRİLİYOR", 1
+            )
+    return "\n".join(lines)
+
+
 def guarded_alert(state):
     current = datetime.now(TZ)
     if current.hour == OPEN_HOUR and current.minute < OPENING_STABILIZATION_MINUTES:
         print("Açılış stabilizasyonu aktif; alarm gönderilmedi.")
         return None
 
-    warning = alert(state)
+    warning = clarify_pending_suitability(alert(state))
     if warning:
         state["_pendingAlarmRecord"] = warning
     return warning
