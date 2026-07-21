@@ -28,18 +28,6 @@ _original_gecmis_kaydi_ekle = scraper.gecmis_kaydi_ekle
 _original_build_state = scraper.build_state
 
 
-def clarify_pending_suitability(message):
-    if not message:
-        return message
-    lines = message.splitlines()
-    for index, line in enumerate(lines):
-        if line.startswith("⏳ Tekrar uygun doğrulaması:") and index > 0:
-            lines[index - 1] = lines[index - 1].replace(
-                "✅ UYGUN", "⏳ UYGUNLUK DEĞERLENDİRİLİYOR", 1
-            )
-    return "\n".join(lines)
-
-
 def parse_schedule_time(value):
     if not value:
         return None
@@ -130,7 +118,7 @@ def guarded_alert(state):
         print(f"Açılış stabilizasyonu aktif; alarm gönderilmedi: {state.get('name')}")
         return None
 
-    warning = clarify_pending_suitability(alert(state))
+    warning = alert(state)
     if warning:
         state["_pendingAlarmRecord"] = warning
     return warning
