@@ -13,8 +13,8 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 53,
         "lastAlertLevel": 54,
-        "lastRateChecked": "2026-07-23T12:51:26.049358+03:00",
-        "level": 52,
+        "lastRateChecked": "2026-07-23T12:56:20.564306+03:00",
+        "level": 51,
         "noiseSamples": [
           0,
           0,
@@ -38,7 +38,6 @@
           0,
           0,
           0,
-          0,
           1,
           0,
           0,
@@ -63,7 +62,8 @@
           0,
           0,
           0,
-          0
+          0,
+          1
         ],
         "rateSamples": [
           35.66
@@ -74,7 +74,7 @@
           52,
           52,
           52,
-          52
+          51
         ],
         "stateCandidate": null,
         "stateCandidateCount": 0
@@ -89,7 +89,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-23T12:51:26.049358+03:00",
+        "lastRateChecked": "2026-07-23T12:56:20.564306+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -162,9 +162,9 @@
         "displayTolerance": 5,
         "estimatedHoursToFull": null,
         "filteredLevel": 51,
-        "lastAlertLevel": 49,
-        "lastRateChecked": "2026-07-23T12:51:26.049358+03:00",
-        "level": 49,
+        "lastAlertLevel": 78,
+        "lastRateChecked": "2026-07-23T12:56:20.564306+03:00",
+        "level": 78,
         "noiseSamples": [
           0,
           0,
@@ -218,10 +218,10 @@
         "rawState": true,
         "samples": [
           51,
-          51,
           31,
           31,
-          49
+          49,
+          78
         ],
         "stateCandidate": null,
         "stateCandidateCount": 0
@@ -229,7 +229,7 @@
     },
     "cardVersion": 4,
     "label": "Ula",
-    "lastChecked": "2026-07-23T12:51:26.049358+03:00",
+    "lastChecked": "2026-07-23T12:56:20.564306+03:00",
     "lastEmptiedAt": "2026-07-23T11:01:06.361954+03:00",
     "latitude": 37.10283279418945,
     "longitude": 28.41759490966797,
@@ -437,9 +437,9 @@
         "displayTolerance": 5,
         "estimatedHoursToFull": null,
         "filteredLevel": 81,
-        "lastAlertLevel": 81,
-        "lastRateChecked": "2026-07-23T12:51:24.254208+03:00",
-        "level": 81,
+        "lastAlertLevel": 93,
+        "lastRateChecked": "2026-07-23T12:56:19.366979+03:00",
+        "level": 93,
         "noiseSamples": [
           0,
           0,
@@ -486,21 +486,21 @@
           0,
           0,
           0,
-          0,
           2,
-          2
+          2,
+          12
         ],
         "rateSamples": [],
-        "rawState": true,
+        "rawState": false,
         "samples": [
           81,
           81,
-          81,
           79,
-          81
+          81,
+          93
         ],
-        "stateCandidate": null,
-        "stateCandidateCount": 0
+        "stateCandidate": false,
+        "stateCandidateCount": 1
       },
       "glass": {
         "averageHourlyFill": null,
@@ -512,7 +512,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-23T12:51:24.254208+03:00",
+        "lastRateChecked": "2026-07-23T12:56:19.366979+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -586,10 +586,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 99,
         "lastAlertLevel": 100,
-        "lastRateChecked": "2026-07-23T12:51:24.254208+03:00",
+        "lastRateChecked": "2026-07-23T12:56:19.366979+03:00",
         "level": 95,
         "noiseSamples": [
-          0,
           0,
           0,
           0,
@@ -636,6 +635,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "rateSamples": [],
@@ -653,7 +653,7 @@
     },
     "cardVersion": 4,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-23T12:51:24.254208+03:00",
+    "lastChecked": "2026-07-23T12:56:19.366979+03:00",
     "lastEmptiedAt": "2026-07-22T18:00:55.262862+03:00",
     "latitude": 37.19468688964844,
     "longitude": 28.38709831237793,
@@ -725,7 +725,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 95,
-        "lastRateChecked": "2026-07-23T12:51:23.684554+03:00",
+        "lastRateChecked": "2026-07-23T12:56:18.989641+03:00",
         "level": 100,
         "noiseSamples": [
           0,
@@ -799,10 +799,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-23T12:51:23.684554+03:00",
+        "lastRateChecked": "2026-07-23T12:56:18.989641+03:00",
         "level": 97,
         "noiseSamples": [
-          0,
           0,
           0,
           0,
@@ -813,6 +812,7 @@
           4,
           0,
           5,
+          0,
           0,
           0,
           0,
@@ -873,10 +873,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 96,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-23T12:51:23.684554+03:00",
+        "lastRateChecked": "2026-07-23T12:56:18.989641+03:00",
         "level": 95,
         "noiseSamples": [
-          0,
           0,
           0,
           1,
@@ -923,6 +922,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "rateSamples": [],
@@ -940,7 +940,7 @@
     },
     "cardVersion": 4,
     "label": "Muğla Merkez",
-    "lastChecked": "2026-07-23T12:51:23.684554+03:00",
+    "lastChecked": "2026-07-23T12:56:18.989641+03:00",
     "lastEmptiedAt": "2026-07-22T19:01:02.258693+03:00",
     "latitude": 37.21812438964844,
     "longitude": 28.350221633911133,
@@ -1137,7 +1137,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 95,
         "lastAlertLevel": 91,
-        "lastRateChecked": "2026-07-23T12:51:23.119512+03:00",
+        "lastRateChecked": "2026-07-23T12:56:18.536579+03:00",
         "level": 95,
         "noiseSamples": [
           0,
@@ -1213,7 +1213,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-23T12:51:23.119512+03:00",
+        "lastRateChecked": "2026-07-23T12:56:18.536579+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -1287,7 +1287,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 0,
         "lastAlertLevel": 0,
-        "lastRateChecked": "2026-07-23T12:51:23.119512+03:00",
+        "lastRateChecked": "2026-07-23T12:56:18.536579+03:00",
         "level": 0,
         "noiseSamples": [
           0,
@@ -1354,7 +1354,7 @@
     },
     "cardVersion": 4,
     "label": "Milas",
-    "lastChecked": "2026-07-23T12:51:23.119512+03:00",
+    "lastChecked": "2026-07-23T12:56:18.536579+03:00",
     "lastEmptiedAt": "2026-07-21T17:25:48.523643+03:00",
     "latitude": 37.21596145629883,
     "longitude": 28.36799430847168,
@@ -1426,10 +1426,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 24,
         "lastAlertLevel": 23,
-        "lastRateChecked": "2026-07-23T12:51:25.416905+03:00",
+        "lastRateChecked": "2026-07-23T12:56:20.157064+03:00",
         "level": 24,
         "noiseSamples": [
-          0,
           0,
           0,
           0,
@@ -1476,6 +1475,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "rateSamples": [],
@@ -1500,7 +1500,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-23T12:51:25.416905+03:00",
+        "lastRateChecked": "2026-07-23T12:56:20.157064+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -1574,7 +1574,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 92,
         "lastAlertLevel": 92,
-        "lastRateChecked": "2026-07-23T12:51:25.416905+03:00",
+        "lastRateChecked": "2026-07-23T12:56:20.157064+03:00",
         "level": 90,
         "noiseSamples": [
           0,
@@ -1641,7 +1641,7 @@
     },
     "cardVersion": 4,
     "label": "Ula",
-    "lastChecked": "2026-07-23T12:51:25.416905+03:00",
+    "lastChecked": "2026-07-23T12:56:20.157064+03:00",
     "lastEmptiedAt": "2026-07-22T16:55:53.618894+03:00",
     "latitude": 37.103187561035156,
     "longitude": 28.418180465698242,
@@ -1713,10 +1713,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 67,
         "lastAlertLevel": 58,
-        "lastRateChecked": "2026-07-23T12:51:27.186691+03:00",
+        "lastRateChecked": "2026-07-23T12:56:21.419455+03:00",
         "level": 67,
         "noiseSamples": [
-          0,
           0,
           0,
           0,
@@ -1763,6 +1762,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "rateSamples": [],
@@ -1787,7 +1787,7 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 97,
         "lastAlertLevel": 97,
-        "lastRateChecked": "2026-07-23T12:51:27.186691+03:00",
+        "lastRateChecked": "2026-07-23T12:56:21.419455+03:00",
         "level": 97,
         "noiseSamples": [
           0,
@@ -1861,10 +1861,9 @@
         "estimatedHoursToFull": null,
         "filteredLevel": 92,
         "lastAlertLevel": 92,
-        "lastRateChecked": "2026-07-23T12:51:27.186691+03:00",
+        "lastRateChecked": "2026-07-23T12:56:21.419455+03:00",
         "level": 91,
         "noiseSamples": [
-          4,
           2,
           3,
           1,
@@ -1911,6 +1910,7 @@
           0,
           0,
           0,
+          0,
           0
         ],
         "rateSamples": [
@@ -1930,17 +1930,17 @@
     },
     "cardVersion": 4,
     "label": "Yatağan",
-    "lastChecked": "2026-07-23T12:51:27.186691+03:00",
+    "lastChecked": "2026-07-23T12:56:21.419455+03:00",
     "lastEmptiedAt": "2026-07-21T20:15:54.725116+03:00",
     "latitude": 37.34115982055664,
     "longitude": 28.13889503479004,
-    "machineStatus": 0,
+    "machineStatus": 2,
     "name": "D247 BİM YATAĞAN / YATAĞAN - MUĞLA",
-    "openingClosingHours": "21:00 'da kapanıyor",
+    "openingClosingHours": null,
     "operationPriority": "YÜKSEK",
-    "outOfService": false,
+    "outOfService": true,
     "priorityScore": 127,
-    "status": 1,
+    "status": 4,
     "telegramMessageId": 81,
     "type": "early_warning",
     "weeklySchedule": [
